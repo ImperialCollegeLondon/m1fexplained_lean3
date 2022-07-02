@@ -9,7 +9,7 @@ A Xena summer project.
 This is a Lean 3 project. Assuming you have already [installed Lean and its supporting tools](https://leanprover-community.github.io/get_started.html#regular-install) you can install this Lean project with
 
 ```
-leanproject get ImperialCollegeLonidon/m1fexplained
+leanproject get ImperialCollegeLondon/m1fexplained
 ```
 
 ## Contributing.
