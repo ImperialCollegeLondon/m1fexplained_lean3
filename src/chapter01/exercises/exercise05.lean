@@ -1,6 +1,4 @@
 import tactic
-import data.nat.prime
-open nat
 
 -- True or false? n = 3 ↔ n^2-2n-3=0. If you think it's false
 -- then you'll have to modify the statement by putting it in brackets
