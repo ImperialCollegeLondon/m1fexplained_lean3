@@ -39,7 +39,14 @@ end
 
 lemma part_e : ∀ a b : ℤ, (is_square a ∧ is_square b) → is_square (a * b) :=
 begin
-  sorry 
+  intros a b h,
+  unfold is_square at h,
+  rcases h with ⟨⟨x, hx⟩,⟨y, hy⟩⟩,
+  unfold is_square,
+  use x*y,
+  rw hx,
+  rw hy,
+  ring,
 end
 
 
