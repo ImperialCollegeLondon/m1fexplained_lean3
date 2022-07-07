@@ -7,8 +7,23 @@ begin
   norm_num at h,
 end
 
-lemma part_b : ¬ (∀ n : ℕ, n > 0 → ∃ a b c : ℕ, n = a^2 + b^2 + c^2) :=
+lemma part_b : ¬ (∀ n : ℕ, n > 0 → ∃ a b c : ℕ, a>0 ∧ b>0 ∧ c>0 ∧ n = a^2 + b^2 + c^2) :=
 begin
-
+  intro h,
+  specialize h 1,
+  norm_num at h,
+  rcases h with ⟨a, ha, b, hb, c, hc, h⟩, 
+  have hm : a^2 + b^2 + c^2 >= 3,
+  swap,
+  rw ← h at hm,
+  norm_num at hm,
+  clear h,
+  have ha2 : a^2 > 0,
+  apply pow_pos, assumption, 
+  have hb2 : b^2 > 0,
+  apply pow_pos, assumption,
+  have hc2 : c^2 > 0,
+  apply pow_pos, assumption,
+  linarith,
 end
 
