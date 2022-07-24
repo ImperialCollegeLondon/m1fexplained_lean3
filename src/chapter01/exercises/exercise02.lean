@@ -9,7 +9,41 @@ def E : set ℝ := {1}
 -- Which pair of these sets has the property that neither is contained in the other?
 lemma parta : ∃ S T ∈ ({B, C, D, E} : set (set ℝ)), ¬ (S ⊆ T) ∧ ¬ (T ⊆ S) :=
 begin
-  sorry
+  have h0 : D = ({0} : set ℝ),
+  {
+    simp_rw D,
+    ext,
+    split,
+    {
+      intro hx,
+      simp at hx,
+      simp,
+      cases hx with hl hr,
+      cases hl with a ha,
+      rw ha at hr,
+      rw ha,
+      --haveI : has_neg ℤ := infer_instance,
+      rw abs_lt at hr,
+      cases hr with hrl hrr,
+      by_contra hna,
+      apply lt_by_cases _ _ _ _ _,
+      library_search,
+    },
+    intro hx,
+    simp at hx,
+    simp_rw hx,
+    simp,
+    use (0:ℤ),
+    simp,
+  },
+  use D,
+  split,
+  simp,
+  use E,
+  split,
+  simp,
+  rw [h0, E],
+  finish,
 end
 
 -- If X is either B,C,D,E and E ⊆ X ⊆ B, what else can we deduce about X? 
