@@ -1,3 +1,4 @@
+import tactic.interval_cases
 import data.real.basic
 
 -- Let B,C,D,E be the following sets
@@ -10,32 +11,28 @@ def E : set ℝ := {1}
 lemma parta : ∃ S T ∈ ({B, C, D, E} : set (set ℝ)), ¬ (S ⊆ T) ∧ ¬ (T ⊆ S) :=
 begin
   have h0 : D = ({0} : set ℝ),
-  {
-    simp_rw D,
+  { simp_rw D,
     ext,
     split,
-    {
-      intro hx,
+    { intro hx,
       simp at hx,
       simp,
       cases hx with hl hr,
       cases hl with a ha,
       rw ha at hr,
       rw ha,
-      --haveI : has_neg ℤ := infer_instance,
       rw abs_lt at hr,
       cases hr with hrl hrr,
       by_contra hna,
-      apply lt_by_cases _ _ _ _ _,
-      library_search,
-    },
+      norm_cast at *,
+      interval_cases a,
+      contradiction, },
     intro hx,
     simp at hx,
     simp_rw hx,
     simp,
     use (0:ℤ),
-    simp,
-  },
+    simp, },
   use D,
   split,
   simp,
