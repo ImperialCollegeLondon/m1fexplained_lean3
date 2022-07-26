@@ -1,12 +1,13 @@
 import tactic
 import data.real.basic -- for part d
 
-lemma part_a (n : ℕ) : 11 ∣ 5^(2*n) - 3^n :=
+lemma part_a (n : ℕ) : (11 : ℤ) ∣ 5^(2*n) - 3^n :=
 begin
   sorry
 end
 
-lemma part_b (n : ℕ) (hn : 1 ≤ n) : (2^(4 * n - 1)) % 10 = 8 :=
+-- let m be n-1 so 4n-1 becomes 4m+3
+lemma part_b (m : ℕ) : (2^(4 * m + 3)) % 10 = 8 :=
 begin
   sorry
 end
