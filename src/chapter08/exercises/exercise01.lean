@@ -1,4 +1,5 @@
 import tactic
+import data.zmod.basic
 
 /-
 Prove by induction that it's possible to pay, without requiring
@@ -11,5 +12,5 @@ begin
   -- Remark: this looks a little subtle to me, you will have
   -- to think about exactly what statement you want to prove
   -- by induction.
-  sorry
+  sorry,
 end

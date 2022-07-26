@@ -1,9 +1,23 @@
 import tactic
 import data.real.basic -- for part d
 
-lemma part_a (n : ℕ) : 11 ∣ 5^(2*n) - 3^n :=
+lemma part_a (n : ℕ) : (11 : ℤ) ∣ (5 : ℤ)^((2 : ℕ)*n) - (3:ℤ)^n :=
 begin
-  sorry
+  induction n with x y,
+  simp,
+  {
+    induction x with a ha,
+    {
+      simp,
+      rw dvd_iff_exists_eq_mul_left,
+      use 0,
+      simp,
+    },
+    sorry,
+  },
+  {
+    sorry,
+  },
 end
 
 lemma part_b (n : ℕ) (hn : 1 ≤ n) : (2^(4 * n - 1)) % 10 = 8 :=
