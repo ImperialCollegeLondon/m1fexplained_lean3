@@ -55,7 +55,14 @@ end
 -- If X is either B,C,D,E and E ⊆ X ⊆ B, what else can we deduce about X? 
 -- Note that figuring out what to prove is part of the question
 lemma partb (X : set ℝ) (hX : X ∈ ({B,C,D,E} : set (set ℝ))) (h1 : E ⊆ X)
-(h2 : X ⊆ B) : sorry :=
+(h2 : X ⊆ B) : X ≠ D :=
 begin
-  sorry
+  intro hX',
+  rw hX' at *,
+  have hD2 : ¬ (E ⊆ D),
+  { exfalso,
+    simp_rw [E, hD] at h1,
+    simp at h1,
+    exact h1, },
+  contradiction,
 end
