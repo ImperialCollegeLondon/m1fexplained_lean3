@@ -12,6 +12,10 @@ This is a Lean 3 project. Assuming you have already [installed Lean and its supp
 leanproject get ImperialCollegeLondon/m1fexplained
 ```
 
+## Contributors.
+
+Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, `chrt`.
+
 ## Contributing.
 
 Right now, feel free to make pull requests adding either statements of, or solutions to, the exercises. Feel free to also write in English in the comments what the exercises say.
