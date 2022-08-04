@@ -32,6 +32,8 @@ begin
         { simp[D], }, }, }, },
 end
 
+
+
 -- If X is either B,C,D,E and E ⊆ X ⊆ B, what else can we deduce about X? 
 -- Note that figuring out what to prove is part of the question
 lemma partb (X : set ℝ) (hX : X ∈ ({B,C,D,E} : set (set ℝ))) (h1 : E ⊆ X)
