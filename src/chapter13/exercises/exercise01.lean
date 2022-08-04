@@ -9,21 +9,30 @@ import data.nat.modeq
 
 lemma part_a : ∃r : ℕ, 0 ≤ r ∧ r ≤ 10 ∧ 7^137 ≡ r [MOD 11] :=
 begin
-  sorry
+  use 6,
+  unfold nat.modeq,
+  norm_num,
 end
 
 lemma part_b : ∃r : ℕ, 0 ≤ r ∧ r < 645 ∧ 2^81 ≡ r [MOD 645] :=
 begin
-  sorry
+  use 242,
+  unfold nat.modeq,
+  norm_num,
 end
 
 -- Once you compute the last two digits, change 37 below to them.
-lemma part_c : 3^124 ≡ 37 [MOD 100] :=
+lemma part_c : 3^124 ≡ 81 [MOD 100] :=
 begin
-  sorry
+  unfold nat.modeq,
+  norm_num,
 end
 
 lemma part_d : ∃k : ℕ, 21 ∣ k ∧ k ≡ 241 [MOD 1000] :=
 begin
-  sorry
+  unfold nat.modeq,
+  use 17241,
+  split,
+  {norm_num, },
+  {norm_num, },
 end
