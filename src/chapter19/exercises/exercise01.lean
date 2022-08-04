@@ -9,7 +9,7 @@ is `onto`.
 
 -/
 
-def f1 (x : ℝ) : ℝ := x^2+2*x
+def f1 (x : ℝ) : ℝ := x^2 + 2*x
 
 noncomputable def f2 (x : ℝ) : ℝ := 
   if 1 < x then x - 2 
@@ -72,24 +72,43 @@ then put `¬` in front of them (e.g. `exercise01inj : ¬ (injective f1)` and pro
 that instead!
 
 -/
-lemma exercise01inj : injective f1 :=
+lemma exercise01inj : ¬ (injective f1) :=
 begin
-  sorry
+  intro h,
+  have hp : f1 (-2) = f1 0,
+  {unfold f1, norm_num},
+  specialize h hp,
+  norm_num at h,
 end
 
-lemma exercise01surj : surjective f1 :=
+lemma exercise01surj : ¬ (surjective f1) :=
 begin
-  sorry
+  intro h,
+  specialize h (-2),
+  cases h with x hx,
+  unfold f1 at hx,
+  have hp : ∀ x : ℝ, x ^ 2 + 2 * x = -2 ↔ (x + 1)^2 = -1,
+  {intro x, sorry},
+  specialize hp x,
+  rw hp at hx,
+  nlinarith,
 end
 
-lemma exercise02inj : injective f2 :=
+lemma exercise02inj : ¬ (injective f2) :=
 begin
-  sorry
+  intro h,
+  have hp : f2 (1/2) = f2 (5/2),
+  {sorry},
+  specialize h hp,
+  norm_num at h,
 end
 
-lemma exercise02surj : surjective f2 :=
+lemma exercise02surj : ¬ (surjective f2) :=
 begin
-  sorry
+  intro h,
+  have hy : ∀ y : ℝ, y < 0 ∨ y = 0 ∨ 0 < y,
+  {sorry},
+  sorry,
 end
 
 lemma exercise03inj : injective f3 :=
