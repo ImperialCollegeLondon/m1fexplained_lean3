@@ -15,8 +15,16 @@ def f (x : ℝ) := if 0 ≤ x ∧ x ≤ 1 then 2 * x else 1
 
 def g (x : ℝ) := if 0 ≤ x ∧ x ≤ 1 then x ^ 2 else 0
 
-example : g ∘ f = sorry -- replace with formula for g ∘ f
-:= sorry
+example (x : ℝ) : (g ∘ f) x = if 0 ≤ x ∧ x ≤ 1/2 then 4 * x ^ 2 else if 0 ≤ x ∧ x ≤ 1/2 then 0 else 1 -- replace with formula for g ∘ f
+:= 
+begin
+  split_ifs,
+  sorry,
+end
 
-example : f ∘ g = sorry -- replace with formula for f ∘ g
-:= sorry
+example (x : ℝ) : (f ∘ g) x = if 0 ≤ x ∧ x ≤ 1 then 2 * x ^ 2 else 0 
+:= 
+begin
+  split_ifs,
+  sorry,
+end
