@@ -15,8 +15,32 @@ def f (x : ℝ) := if 0 ≤ x ∧ x ≤ 1 then 2 * x else 1
 
 def g (x : ℝ) := if 0 ≤ x ∧ x ≤ 1 then x ^ 2 else 0
 
-example : g ∘ f = sorry -- replace with formula for g ∘ f
-:= sorry
+example (x : ℝ) : (g ∘ f) x = if 0 ≤ x ∧ x ≤ 1/2 then 4 * x ^ 2 else if 1/2 < x ∧ x ≤ 1 then 0 else 1 -- replace with formula for g ∘ f
+:= 
+begin
+  change g (f x) = _,
+  unfold f,
+  unfold g,
+  split_ifs;
+  try {simp};
+  try {rw not_and_distrib at *};
+  try {cases h};
+  try {cases h_1};
+  try {cases h_2};
+  try {cases h_3};
+  try {linarith},
+end
 
-example : f ∘ g = sorry -- replace with formula for f ∘ g
-:= sorry
+example (x : ℝ) : (f ∘ g) x = if 0 ≤ x ∧ x ≤ 1 then 2 * x ^ 2 else 0 
+:= 
+begin
+  change f (g x) = _,
+  unfold f,
+  unfold g,
+  split_ifs;
+  try {simp};
+  try {rw not_and_distrib at *};
+  try {cases h};
+  try {cases h_1};
+  try {nlinarith},
+end
