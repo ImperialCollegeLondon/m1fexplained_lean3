@@ -23,10 +23,6 @@ begin
 end
 
 
---#check is_square
-
---def is_square (n : ℤ) : Prop := ∃ m : ℤ, n = m ^ 2
-
 lemma part_d : ¬ (∀ a b : ℤ, is_square (a * b) → is_square a ∧ is_square b) :=
 begin
   intro h,
