@@ -1,4 +1,4 @@
-import set_theory.zfc
+import set_theory.zfc.basic
 import tactic
 
 lemma Set.well_founded : ¬ ∃ α : Set, α = {α} :=
@@ -74,9 +74,9 @@ begin
     symmetry,
     simpa, },  
   { -- {α} ≠ {three}
-    exact part_b_helper h3, },
+    exact h3, },
   { -- {α} ≠ {{one,three}}
-    exact part_b_helper h13, },
+    exact h13, },
   { -- With our implementation of {3} we can't have
     -- {α} = 3, but if you implement the naturals
     -- numbers as n+1={n} then we would have to avoid

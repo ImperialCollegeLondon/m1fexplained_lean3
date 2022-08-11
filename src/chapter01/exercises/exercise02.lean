@@ -52,9 +52,34 @@ begin
         { simp[D], }, }, }, },
 end
 
+
+
 -- If X is either B,C,D,E and E ⊆ X ⊆ B, what else can we deduce about X? 
 -- Note that figuring out what to prove is part of the question
 lemma partb (X : set ℝ) (hX : X ∈ ({B,C,D,E} : set (set ℝ))) (h1 : E ⊆ X)
+(h2 : X ⊆ B) : X = B ∨ X = C ∨ X = E:=
+begin
+  simp at hX,
+  cases hX with hb hc,
+  { left,
+    apply hb, },
+  { cases hc with h3 h4,
+    right,
+    left,
+    apply h3,
+    { cases h4 with h5 h6,
+      { left,
+        subst h5,
+        rw D at h1,
+        rw E at h1,
+        finish, },
+      { right, 
+        subst h6,
+        right,
+        refl, }, }, },
+end
+
+lemma partb' (X : set ℝ) (hX : X ∈ ({B,C,D,E} : set (set ℝ))) (h1 : E ⊆ X)
 (h2 : X ⊆ B) : X ≠ D :=
 begin
   intro hX',

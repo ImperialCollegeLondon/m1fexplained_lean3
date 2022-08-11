@@ -2,7 +2,7 @@ import tactic
 import data.real.irrational
 
 /-- √3 is irrational. -/
-lemma part_a : irrational 3 :=
+lemma part_a : irrational (real.sqrt 3) :=
 begin
   sorry
 end
