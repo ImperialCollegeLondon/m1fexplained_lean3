@@ -1,5 +1,11 @@
 import tactic
 
+/-
+7. Disprove the following statements:
+(a) If n and k are positive integers, then n^k − n is always divisible by k.
+(b) Every positive integer is the sum of three squares (the squares be-ing 0, 1, 4, 9, 16, etc.).
+-/
+
 lemma part_a : ¬ (∀ n k : ℕ, n > 0 → k > 0 → k ∣ n ^ k - n) :=
 begin
   intro h,
