@@ -146,13 +146,34 @@ begin
   nlinarith,
 end
 
+lemma padic_val_nat_two_aux (a b c : ℕ) : padic_val_nat 2 (2 ^ a * 3 ^ b * 5 ^ c) = a :=
+begin
+  haveI : fact (nat.prime 2) := fact.mk nat.prime_two,
+  rw [padic_val_nat.mul 2 (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.prime_pow,
+    padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
+  { simp },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_two h,
+    norm_num at h, },
+    { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_two h,
+    norm_num at h, },
+  all_goals {exact pow_ne_zero _ (by norm_num)},
+end
+
 lemma exercise04inj : injective f4 :=
 begin
   rintro ⟨a1, b1, c1⟩ ⟨a2, b2, c3⟩ h,
   unfold f4 at h,
   simp,
-  -- should be solved by unique prime factorisation mathematically 
-  sorry,
+  refine ⟨_, _, _⟩,
+  { rw [← padic_val_nat_two_aux a1 b1 c1, h, padic_val_nat_two_aux], },
+  { 
+    sorry
+  },
+  { 
+    sorry
+  },
 end
 
 lemma exercise04surj : ¬ (surjective f4) :=
