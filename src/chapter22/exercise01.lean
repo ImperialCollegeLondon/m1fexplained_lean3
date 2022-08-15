@@ -15,11 +15,24 @@ bounds and greatest lower bounds are.
 
 def Si : set ℝ := {-1, 3, 7, -2}
 
--- If you think Si is bounded above, prove this. If you
--- think it's not, then *disprove* it by putting `¬` in front of it.
+-- Si is bounded above.
 lemma part_a_ub : ∃ z : ℝ, z ∈ upper_bounds Si :=
 begin
-  sorry
+  use 7,
+  rw upper_bounds,
+  intro t,
+  intro h,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  simp at h,
+  rw h,
+  norm_num,
 end
 
 -- if you proved there was an upper bound, then change 37 to the 
