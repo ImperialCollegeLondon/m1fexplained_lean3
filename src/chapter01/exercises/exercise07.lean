@@ -8,28 +8,31 @@ import tactic
 
 lemma part_a : ¬ (∀ n k : ℕ, n > 0 → k > 0 → k ∣ n ^ k - n) :=
 begin
+  -- True for k prime
   intro h,
   specialize h 2 4,
   norm_num at h,
 end
 
-lemma part_b : ¬ (∀ n : ℕ, n > 0 → ∃ a b c : ℕ, a>0 ∧ b>0 ∧ c>0 ∧ n = a^2 + b^2 + c^2) :=
+/-
+  https://leanprover.zulipchat.com/#narrow/stream/116395-maths/topic/arithmetic.20timeout.20with.20a.5E2.2Bb.5E2.2Bc.5E2.3D7
+  Thanks to Patrick Johnson
+  Also a way via zmod by Alex J. Best
+-/
+
+lemma part_b : ¬ (∀ n : ℕ, n > 0 → ∃ a b c : ℕ, n = a^2 + b^2 + c^2) :=
 begin
+  -- True for n <= 6
   intro h,
-  specialize h 1,
-  norm_num at h,
-  rcases h with ⟨a, ha, b, hb, c, hc, h⟩, 
-  have hm : a^2 + b^2 + c^2 >= 3,
-  swap,
-  rw ← h at hm,
-  norm_num at hm,
-  clear h,
-  have ha2 : a^2 > 0,
-  apply pow_pos, assumption, 
-  have hb2 : b^2 > 0,
-  apply pow_pos, assumption,
-  have hc2 : c^2 > 0,
-  apply pow_pos, assumption,
-  linarith,
+  specialize h 7,
+  have lt_three : ∀ {a b c : ℕ}, 7 = a ^ 2 + b ^ 2 + c ^ 2 → a < 3,
+  { intros a b c h, nlinarith, },
+  simp at h,
+  rcases h with ⟨a, b, c, h⟩,
+  have ha := lt_three h,
+  have hb := lt_three (by linarith : 7 = b^2 + a^2 + c^2),
+  have hc := lt_three (by linarith : 7 = c^2 + a^2 + b^2),
+  interval_cases a; interval_cases b; interval_cases c; -- Generate 3 x 3 x 3 = 27 goals
+  cases h,
 end
 
