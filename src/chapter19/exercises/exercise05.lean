@@ -15,15 +15,70 @@ there are two different 5-element subsets of S with the same sum.
 must be two integers such that one divides the other.
 -/
 import tactic
+import combinatorics.pigeonhole
 
 lemma parta (S : finset ℤ) (hS : S.card = 6) : ∃ a b ∈ S, a ≠ b ∧ (5 : ℤ) ∣ a - b :=
 begin
-  sorry
+  let f : ℤ → ℤ := λ z, z % 5, 
+  let T : finset ℤ := finset.Ico 0 5,
+  have hfT : ∀ z : ℤ, z ∈ S → (f z) ∈ T,
+  {
+    intros z hz,
+    simp [f, T],
+    split,
+    apply int.mod_nonneg,
+    norm_num,
+    apply int.mod_lt,
+    norm_num,
+  },
+  have hST : T.card * 1 < S.card,
+  { 
+    simp [T, hS],
+    norm_num,
+  },
+  have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST,
+  dsimp at this,
+  rcases this with ⟨y, Hy, H⟩,
+  rw finset.one_lt_card at H,
+  rcases H with ⟨a, ha, b, hb, H⟩,
+  simp at ha hb,
+  use [a, ha.1, b, hb.1, H],
+  have h : f a = f b,
+  {rw [ha.2, hb.2]},
+  simp [f] at h,
+  exact (int.modeq.symm h).dvd,
 end
 
 lemma partb (n : ℕ) (hn : 0 < n) (S : finset ℤ) (hS : S.card = n + 1) : ∃ a b ∈ S, a ≠ b ∧ (n : ℤ) ∣ a - b :=
 begin
-  sorry
+  let f : ℤ → ℤ := λ z, z % n, 
+  let T : finset ℤ := finset.Ico 0 n,
+  have hfT : ∀ z : ℤ, z ∈ S → (f z) ∈ T,
+  {
+    intros z hz,
+    simp [f, T],
+    split,
+    apply int.mod_nonneg,
+    linarith,
+    convert int.mod_lt _ _,
+    simp,
+    linarith,
+  },
+  have hST : T.card * 1 < S.card,
+  { 
+    simp [T, hS],
+  },
+  have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST,
+  dsimp at this,
+  rcases this with ⟨y, Hy, H⟩,
+  rw finset.one_lt_card at H,
+  rcases H with ⟨a, ha, b, hb, H⟩,
+  simp at ha hb,
+  use [a, ha.1, b, hb.1, H],
+  have h : f a = f b,
+  {rw [ha.2, hb.2]},
+  simp [f] at h,
+  exact (int.modeq.symm h).dvd,
 end
 
 open_locale big_operators
