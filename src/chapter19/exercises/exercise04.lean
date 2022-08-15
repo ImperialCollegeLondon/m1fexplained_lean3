@@ -12,22 +12,81 @@ open function -- so we can write `injective`/`surjective` instead of `function.i
 
 -- For each of the parts below, if you think it's false then stick `¬` in front of it before you start proving it.
 
-lemma parta : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective f :=
+
+-- The below is for counterexamples
+-- Let X be {a}
+inductive X : Type
+| a : X
+
+-- Let Y be {b,c}
+inductive Y : Type
+| b : Y
+| c : Y
+
+-- Let Z be {d}
+inductive Z : Type
+| d : Z
+
+-- Define f by f(X.a)=Y.b
+def f : X → Y
+| X.a := Y.b
+
+-- define g by g(Y.b)=g(Y.c)=Z.d
+def g : Y → Z
+| Y.b := Z.d
+| Y.c := Z.d
+
+lemma parta : ¬ (∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective f) :=
 begin
-  sorry
+  by_contra,
+  specialize h X Y Z f g,
+  have hgf : surjective (g ∘ f),
+  {intro z,
+  cases z,
+  use X.a,
+  refl},
+  specialize h hgf,
+  specialize h Y.c,
+  cases h with x h,
+  cases x,
+  cases h,
 end
 
 lemma partb : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective g :=
 begin
-  sorry
+  intros X Y Z f g hgf,
+  intro b,
+  specialize hgf b,
+  cases hgf with a hgf,
+  use f a,
+  exact hgf,
+end
+
+lemma gf_injective : injective (g ∘ f) :=
+begin
+  intros a b h,
+  cases a,
+  cases b,
+  refl,
 end
 
 lemma partc : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective f :=
 begin
-  sorry
+  intros X Y Z f g hgf a b hf,
+  have hg : g (f a) = g (f b),
+  {rw hf},
+  specialize hgf hg,
+  exact hgf,
 end
 
-lemma partd : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective g :=
+lemma partd : ¬ (∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective g) :=
 begin
-  sorry
+  by_contra,
+  specialize h X Y Z f g,
+  specialize h gf_injective,
+  have hy : g Y.b = g Y.c,
+  {unfold g},
+  specialize h hy,
+  simp at h,
+  exact h,
 end
