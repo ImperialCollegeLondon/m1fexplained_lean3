@@ -26,6 +26,12 @@ begin
   sorry
 end
 
+-- I think that this version of part (b) is more appropriate for doing part (c)
+lemma partb' (n : ℕ) (hn : 0 < n) (S : fin (n + 1) → ℤ) : ∃ a b : fin (n + 1), a ≠ b ∧ (n : ℤ) ∣ a - b :=
+begin
+  sorry
+end
+
 open_locale big_operators
 
 lemma partc (n : ℕ) (a : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, a i :=
