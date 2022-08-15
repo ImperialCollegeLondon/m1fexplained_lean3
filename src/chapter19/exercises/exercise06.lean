@@ -9,24 +9,6 @@ open function
 
 def f (n : ℕ) : ℤ := if 2 ∣ n then n / 2 else - (n+1) / 2 -- replace 37 with a surjective function
 
-lemma dvd_mul_add_iff (n t b : ℤ) : n ∣ n * t + b ↔ n ∣ b :=
-begin
-  split,
-  { rw dvd_iff_exists_eq_mul_left,
-    rintro ⟨d, hd⟩,
-    rw dvd_iff_exists_eq_mul_left,
-    use d - t,
-    linear_combination hd, },
-  { rw dvd_iff_exists_eq_mul_left,
-    rintro ⟨d, hd⟩,
-    rw dvd_iff_exists_eq_mul_left,
-    use d + t,
-    linear_combination hd, },
-
-  -- rw dvd_add_right,
-  -- apply dvd_mul_right 
-end
-
 lemma f_surj : surjective f :=
 begin
   intro z,
@@ -78,5 +60,70 @@ def g (z : ℤ) : ℕ := if 0 < z then 2 * z.nat_abs else 2 * z.nat_abs + 1 -- r
 
 lemma g_inj : injective g :=
 begin
-  sorry
+  intros a b hab,
+  rcases nat.even_or_odd (g a) with h1 | h2,
+  {
+    have ha : 0 < a,
+    {
+      by_contra,
+      push_neg at h,
+      unfold g at h1,
+      rw if_neg h.not_lt at h1,
+      rw even_iff_two_dvd at h1,
+      rw nat.dvd_add_right at h1,
+      norm_num at h1,
+      apply dvd_mul_right,
+    },
+    have hgb : even (g b),
+    {
+      rw ← hab, exact h1
+    },
+    have hb : 0 < b,
+    {
+      by_contra,
+      push_neg at h,
+      unfold g at hgb,
+      rw if_neg h.not_lt at hgb,
+      rw even_iff_two_dvd at hgb,
+      rw nat.dvd_add_right at hgb,
+      norm_num at hgb,
+      apply dvd_mul_right,
+    },
+    unfold g at hab,
+    simp [if_pos ha, if_pos hb] at hab,
+    zify at hab,
+    rwa [int.nat_abs_of_nonneg ha.le, int.nat_abs_of_nonneg hb.le] at hab,
+  },
+  {
+    have ha : a ≤ 0,
+    {
+      by_contra,
+      push_neg at h,
+      unfold g at h2,
+      rw if_pos h at h2,
+      rw nat.odd_iff_not_even at h2,
+      apply h2,
+      rw even_iff_two_dvd,
+      apply dvd_mul_right,
+    },
+    have hgb : odd (g b),
+    {
+      rw ← hab, exact h2
+    },
+      have hb : b ≤ 0,
+    {
+      by_contra,
+      push_neg at h,
+      unfold g at hgb,
+      rw if_pos h at hgb,
+      rw nat.odd_iff_not_even at hgb,
+      apply hgb,
+      rw even_iff_two_dvd,
+      apply dvd_mul_right,
+    },
+    unfold g at hab,
+    simp [if_neg ha.not_lt, if_neg hb.not_lt] at hab,
+    zify at hab,
+    simpa [int.of_nat_nat_abs_of_nonpos ha, int.of_nat_nat_abs_of_nonpos hb] using hab,
+  },
 end
