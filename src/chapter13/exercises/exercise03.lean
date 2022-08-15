@@ -14,25 +14,56 @@ For each of the following congruence equations, either find a solution x ∈ ℤ
 
 lemma part_a : ∃x : ℤ, 99 * x ≡ 18 [ZMOD 30] :=
 begin
+  unfold int.modeq,
+  use 2,
+  norm_num,
+end
+
+lemma mul_mod_mul_left (t x y : ℤ) : (t * x) % (t * y) = t * (x % y) := sorry
+
+lemma part_b : ¬∃x : ℤ, 91 * x ≡ 84 [ZMOD 143] :=
+begin
+  unfold int.modeq,
+  norm_num,
+  by_contra',
+  cases this with h h1,
+  have h2 : 13 * (7 * h) % (13 * 11) = 84,
+  { convert h1 using 2,
+    ring, },
+  { rw int.mul_mod_mul_of_pos at h2,
+    { have : (13 : ℤ) ∣ 84, 
+      {use 7 * h % 11,
+       exact h2.symm, },
+      {norm_num at this, },},
+    { norm_num, },},
+end
+
+lemma part_c : ¬∃x : ℤ, x^2 ≡ 2 [ZMOD 5] :=
+begin
+  unfold int.modeq,
+  norm_num,
+  by_contra',
+  cases this with h h1,
+
   sorry
 end
 
-lemma part_b : ∃x : ℤ, 91 * x ≡ 84 [ZMOD 143] :=
+lemma part_d : ¬∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 5] :=
 begin
+  unfold int.modeq,
+  norm_num,
+  by_contra',
+  cases this with h h1,
+  
+  have : (5 : ℤ) ∣ (h^2 + h + 1),
+  {exact h1, },
+  
   sorry
 end
 
-lemma part_c : ∃x : ℤ, x^2 ≡ 2 [ZMOD 5] :=
+lemma part_e : ∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 7] :=
 begin
-  sorry
-end
-
-lemma part_d : ∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 5] :=
-begin
-  sorry
-end
-
-lemma part_e : ∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 5] :=
-begin
-  sorry
+  unfold int.modeq,
+  use 2,
+  norm_num,
 end
