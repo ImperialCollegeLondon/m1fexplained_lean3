@@ -1,5 +1,6 @@
 import data.int.modeq
-
+import data.zmod.algebra
+import tactic
 /-
 For each of the following congruence equations, either find a solution x ∈ ℤ or show that no solution exists:
 (a) 99x ≡ 18 mod 30.
@@ -44,21 +45,25 @@ begin
   norm_num,
   by_contra',
   cases this with h h1,
-
-  sorry
+  change h ^ 2 % (5 : ℕ) = 2 % (5 : ℕ) at h1,
+  rw ← zmod.int_coe_eq_int_coe_iff' at h1,
+  push_cast at h1,
+  revert h1,
+  generalize : (h : zmod 5) = t,
+  dec_trivial!,
 end
 
 lemma part_d : ¬∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 5] :=
 begin
   unfold int.modeq,
-  norm_num,
   by_contra',
   cases this with h h1,
-  
-  have : (5 : ℤ) ∣ (h^2 + h + 1),
-  {exact h1, },
-  
-  sorry
+  change (h^2+h+1) % (5: ℕ) = 0 % (5:ℕ)at h1,
+  rw ← zmod.int_coe_eq_int_coe_iff' at h1,
+  push_cast at h1,
+  revert h1,
+  generalize : (h : zmod 5) = t,
+  dec_trivial!,
 end
 
 lemma part_e : ∃x : ℤ, x^2 + x + 1 ≡ 0 [ZMOD 7] :=
