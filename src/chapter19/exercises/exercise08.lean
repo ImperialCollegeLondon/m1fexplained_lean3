@@ -68,7 +68,7 @@ begin
   },
 end
 
--- useful lemma
+-- useful lemma for the proof
 lemma iff_one_mul (a b : ℤ) (ha : a ≠ (0:ℤ)): a = b * a ↔ b = 1 := 
 begin
   split,
@@ -95,7 +95,6 @@ begin
   -- apply int.div_eq_of_eq_mul_right (why this doesn't work;-;),
   sorry
 end
-
 
 example : ¬ ∃ a b c : ℤ, a ≠ b ∧ b ≠ c ∧ c ≠ a ∧ ∃ P : ℤ[X], eval a P = b ∧ eval b P = c ∧ eval c P = a :=
 begin
@@ -125,6 +124,7 @@ begin
     sorry,
     linear_combination (-k2 - 1) * h1 + (-(k3 * k1) - 1) * h2 + (-(k2 * k1) - k1) * h3,
   },
+  -- then we can use something like 'int.eq_one_or_neg_one_of_mul_eq_one'' to consider different cases for k1, k2, k3
   sorry,
 end
 
