@@ -230,15 +230,101 @@ begin
 end
 
 -- thinking if an alternative way may be more easier using the following two 
-lemma dvd_mod_le_ (a b : ℤ) (hb : b ≠ 0) : a ∣ b → |a| ≤ |b| :=
+lemma dvd_mod_le (a b : ℤ) (hb : b ≠ 0) : a ∣ b → |a| ≤ |b| :=
 begin
-  sorry,
+  intro h,
+  have := exists_eq_mul_left_of_dvd h,
+  cases this with c h1,
+  have h2 : |b| = |c| * |a| , 
+  {rw [h1, abs_mul]},
+  have hc : c ≠ 0,
+  {
+    by_contra hc,
+    simp [hc] at h1,
+    norm_cast at *,
+  },
+  have hc : 1 ≤ |c|,
+  {exact int.one_le_abs hc}, 
+  rw h2,
+  exact le_mul_of_one_le_left (abs_nonneg a) hc,
 end
 
-lemma squeeze_three (a b c : ℤ) (h1 : |a| ≤ |b|) (h2 : |b| ≤ |c|) (h3 : |c| ≤ |a|) : |a| = |b| ∧ |a| = |c| :=
+lemma squeeze_three (a b c : ℤ) (h1 : a ≤ b) (h2 : b ≤ c) (h3 : c ≤ a) 
+  : a = b ∧ a = c ∧ b = c:=
 begin
   split,
-  -- maybe we can use something like ge_antisymm here to prove
-  sorry,
-  sorry,
+  have h4 : b ≤ a,
+  {linarith},
+  exact ge_antisymm h4 h1,
+  split,
+  have h5 : a ≤ c,
+  {linarith},
+  exact ge_antisymm h3 h5,
+  have h6 : c ≤ b,
+  {linarith},
+  exact ge_antisymm h6 h2,
 end
+
+-- alternative full solution
+example : ¬ ∃ a b c : ℤ, a ≠ b ∧ b ≠ c ∧ c ≠ a ∧ ∃ P : ℤ[X], eval a P = b ∧ eval b P = c ∧ eval c P = a :=
+begin
+  intro h,
+  rcases h with ⟨a, b, c, hab, hbc, hca, P, hP1, hP2, hP3⟩,
+  have h : ∀ x y : ℤ, (x - y) ∣ eval x P - eval y P,
+  {apply dvd_poly_sub_poly},
+  have h1 : (a - b) ∣ (b - c) ,
+  {
+    specialize h a b, rwa [hP1, hP2] at h,
+  },
+  have h2 : (b - c) ∣ (c - a),
+  {
+    specialize h b c, rwa [hP2, hP3] at h,
+  },
+  have h3 : (c - a) ∣ (a - b),
+  {
+    specialize h c a, rwa [hP3, hP1] at h,
+  },
+  clear hP1 hP2 hP3 h P,
+  have h4 : (a - b) ≠ 0,
+  {
+    exact sub_ne_zero.mpr hab,
+  },
+  have h5 : (b - c) ≠ 0,
+  {
+    exact sub_ne_zero.mpr hbc,
+  },
+  have h6 : (c - a) ≠ 0,
+  {
+    exact sub_ne_zero.mpr hca,
+  },
+  have h7 : |a - b| ≤ |b - c|,
+  {
+    exact dvd_mod_le (a - b) (b - c) h5 h1,
+  },
+  have h8 : |b - c| ≤ |c - a|,
+  {
+    exact dvd_mod_le (b - c) (c - a) h6 h2,
+  },
+  have h9 : |c - a| ≤ |a - b|,
+  {
+    exact dvd_mod_le (c - a) (a - b) h4 h3,
+  },
+  have h10 : |a - b| = |b - c| ∧ |a - b| = |c - a| ∧ |b - c| = |c - a|,
+  {
+    exact squeeze_three (|a - b|) (|b - c|) (|c - a|) h7 h8 h9,
+  },
+  clear h1 h2 h3 h4 h5 h6 h7 h8 h9,
+  rcases h10 with ⟨h1, h2, h3⟩,
+  simp [abs_eq_abs] at *,
+  cases h1 with h11 h12,
+  swap,
+  finish,
+  cases h2 with h21 h22,
+  swap,
+  finish,
+  cases h3 with h31 h32,
+  swap,
+  finish,
+  omega,
+end
+
