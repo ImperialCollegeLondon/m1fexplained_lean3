@@ -74,11 +74,14 @@ begin
   split,
   {
     intro h,
-    have h1 : a / a = (b * a) / a,
+    have h1 : a / a = b * a / a,
     {exact congr (congr_arg has_div.div h) rfl},
-    have h2 : b * a / a = b,
-    {sorry},
-    sorry 
+    have h2 : a / a = 1,
+    {apply int.div_eq_of_eq_mul_right ha, ring},
+    have h3 : b * a / a = b * (a / a),
+    {finish},
+    simp [h2, h3, h2] at h1,
+    rw h1,
   },
   {
     intro h,
@@ -87,13 +90,61 @@ begin
   },
 end
 
--- the sorry above needs this
-example (a : ℤ) (a ≠ 0): a / a = 1 :=
+-- another useful fact for the proof
+lemma cube_one (a b c : ℤ) (h : a * b * c = 1) (ha : a ≠ -1) (hb : b ≠ -1) (hc : c ≠ -1) : 
+  a = 1 ∧ b = 1 ∧ c = 1 :=
 begin
-  have ha : a = a * 1,
-  {ring},
-  -- apply int.div_eq_of_eq_mul_right (why this doesn't work;-;),
-  sorry
+  split,
+  {
+    suffices : a = 1 ∨ a = -1,
+    {
+      cases this with h1 h2,
+      exact h1,
+      exfalso,
+      finish
+    },
+    {
+      apply int.eq_one_or_neg_one_of_mul_eq_one,
+      swap,
+      use (b * c),
+      linarith
+    },
+  },
+  {
+    split,
+    {
+      rw (show a * b * c = b * a * c, by ring) at h,
+      suffices : b = 1 ∨ b = -1,
+      {
+        cases this with h1 h2,
+        exact h1,
+        exfalso,
+        finish
+      },
+      {
+        apply int.eq_one_or_neg_one_of_mul_eq_one,
+        swap,
+        use (a * c),
+        linarith
+      },
+    },
+    {
+      rw (show a * b * c = c * a * b, by ring) at h,
+      suffices : c = 1 ∨ c = -1,
+      {
+        cases this with h1 h2,
+        exact h1,
+        exfalso,
+        finish
+      },
+      {
+        apply int.eq_one_or_neg_one_of_mul_eq_one,
+        swap,
+        use (a * b),
+        linarith
+      },
+    },
+  },
 end
 
 example : ¬ ∃ a b c : ℤ, a ≠ b ∧ b ≠ c ∧ c ≠ a ∧ ∃ P : ℤ[X], eval a P = b ∧ eval b P = c ∧ eval c P = a :=
@@ -114,6 +165,7 @@ begin
   {
     specialize h c a, rwa [hP3, hP1] at h, exact exists_eq_mul_left_of_dvd h
   },
+  clear hP1 hP2 hP3 h P,
   cases h1 with k1 h1,
   cases h2 with k2 h2,
   cases h3 with k3 h3,
@@ -121,25 +173,72 @@ begin
   { 
     ring_nf,
     suffices : (a - b) = (k3 * k2 * k1) * (a - b),
-    sorry,
+    rwa iff_one_mul at this,
+    exact sub_ne_zero.mpr hab,
     linear_combination (-k2 - 1) * h1 + (-(k3 * k1) - 1) * h2 + (-(k2 * k1) - k1) * h3,
   },
-  -- then we can use something like 'int.eq_one_or_neg_one_of_mul_eq_one'' to consider different cases for k1, k2, k3
-  sorry,
+  have hk1 : k1 ≠ -1,
+  {
+    by_contra hk,
+    simp [hk] at h1,
+    norm_cast at *,
+  },
+  have hk2 : k2 ≠ -1,
+  {
+    by_contra hk,
+    simp [hk] at h2,
+    norm_cast at *,
+  },
+  have hk3 : k3 ≠ -1,
+  {
+    by_contra hk,
+    simp [hk] at h3,
+    norm_cast at *,
+  },
+  have hk' : k1 = 1 ∧ k2 = 1 ∧ k3 = 1,
+  {
+    exact cube_one k1 k2 k3 hk hk1 hk2 hk3,
+  },
+  clear hk1 hk2 hk3,
+  rcases hk' with ⟨hk1, hk2, hk3⟩,
+  simp [hk1, hk2, hk3] at *,
+  clear hk hk1 hk2 hk3,
+  suffices : a = c,
+  apply hca,
+  rw this,
+  rw h3 at h1,
+  have h' : b - c = c - a ↔ b = 2 * c - a,
+  {
+    split,
+    intro h,
+    linarith,
+    intro h,
+    linarith,
+  },
+  rw h' at h1,
+  rw h1 at h2,
+  have h'' : c - a = 2 * c - a - c ↔ 3 * c = 3 * a,
+  {
+    split,
+    intro h,
+    linear_combination -h3 - h1,
+    intro h,
+    linear_combination,
+  },
+  rw h'' at h2,
+  linarith,
 end
 
-
--- thinking if this alternative way may be more leanable
-lemma dvd_mod_le (a b : ℤ) (hb : b ≠ 0) : a ∣ b → |a| ≤ |b| :=
+-- thinking if an alternative way may be more easier using the following two 
+lemma dvd_mod_le_ (a b : ℤ) (hb : b ≠ 0) : a ∣ b → |a| ≤ |b| :=
 begin
   sorry,
 end
 
-example (a b c : ℤ) (h1 : |a| ≤ |b|) (h2 : |b| ≤ |c|) (h3 : |c| ≤ |a|) : |a| = |b| ∧ |a| = |c| :=
+lemma squeeze_three (a b c : ℤ) (h1 : |a| ≤ |b|) (h2 : |b| ≤ |c|) (h3 : |c| ≤ |a|) : |a| = |b| ∧ |a| = |c| :=
 begin
   split,
-  -- maybe we can use something like ge_antisymm here
+  -- maybe we can use something like ge_antisymm here to prove
   sorry,
   sorry,
 end
-
