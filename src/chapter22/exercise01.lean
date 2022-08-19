@@ -1,5 +1,6 @@
 import data.real.basic
 import analysis.normed.field.unit_ball
+import data.real.sqrt
 
 open_locale topological_space big_operators nnreal ennreal uniformity pointwise
 
@@ -9,7 +10,7 @@ lower bound? In the cases where these exist, state what the least upper
 bounds and greatest lower bounds are.
 (i) S = {−1, 3, 7, −2}.
 (ii) S = {x | x ∈ ℝ and |x − 3| < |x + 7|}.
-(iii) S = {x | x ∈ ℝ and x³ − 3x < 0}.
+(iii) S = {x | x ∈ ℝ and  x³ −3x < 0}.
 (iv) S = {x | x ∈ ℝ and x² = a² + b² for some a, b ∈ ℕ}.
 -/
 
@@ -35,62 +36,233 @@ begin
   norm_num,
 end
 
--- if you proved there was an upper bound, then change 37 to the 
--- right answer and prove it's a least upper bound!
--- If you proved there was no upper bound, just comment out
--- this part.
-lemma part_a_lub : is_lub Si 37 :=
+-- 7 is a least upper bound.
+lemma part_a_lub : is_lub Si 7 :=
 begin
-  sorry
+  rw is_lub,
+  rw is_least,
+  split,
+  rw upper_bounds,
+  intro t,
+  intro h,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  simp at h,
+  rw h,
+  norm_num,
+  rw lower_bounds,
+  intro n,
+  intro h,
+  rw upper_bounds at h,
+  simp at h,
+  apply h,
+  unfold Si,
+  simp,
 end
 
--- Now the same for lower bounds.
+-- Si is bounded below.
 lemma part_a_lb : ∃ z : ℝ, z ∈ lower_bounds Si :=
 begin
-  sorry
+  use -2,
+  rw lower_bounds,
+  intro t,
+  intro h,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  simp at h,
+  rw h,
 end
 
--- if you proved there *was* a lower bound,
--- and prove it's a least upper bound!
--- If not, then delete this part.
-lemma part_a_glb : is_glb Si 37 :=
+-- -2 is the greatest lower bound.
+lemma part_a_glb : is_glb Si (-2) :=
 begin
-  sorry
+  rw is_glb,
+  rw is_greatest,
+  split,
+  rw lower_bounds,
+  intro t,
+  intro h,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  cases h,
+  rw h,
+  norm_num,
+  simp at h,
+  rw h,
+  rw upper_bounds,
+  intro n,
+  intro h,
+  rw lower_bounds at h,
+  simp at h,
+  apply h,
+  unfold Si,
+  simp,
 end
 
 def Sii : set ℝ := {x | ∥x - 3∥ < ∥x + 7∥}.
 
--- If you think Sii is bounded above, prove this. If you
--- think it's not, then *disprove* it by putting `¬` in front of it.
-lemma part_b_ub : ∃ z : ℝ, z ∈ upper_bounds Sii :=
+-- Sii is not bounded above.
+lemma part_b_ub : ¬ ∃ z : ℝ, z ∈ upper_bounds Sii :=
 begin
-  sorry
+  rw not_exists,
+  intro n,
+  rw upper_bounds,
+  simp,
+  by_cases h: n ≤ 3,
+  use 4,
+  split,
+  unfold Sii,
+  simp,
+  norm_num,
+  rw abs_of_pos,
+  norm_num,
+  norm_num,
+  linarith,
+  use n+1,
+  split,
+  unfold Sii,
+  simp,
+  rw abs_of_pos,
+  rw abs_of_pos,
+  linarith,
+  linarith,
+  linarith,
+  linarith,
 end
 
 -- if you proved there was an upper bound, then change 37 to the 
 -- right answer and prove it's a least upper bound!
 -- etc etc
-lemma part_b_lub : is_lub Sii 37 :=
-begin
-  sorry
-end
 
+-- Si is bounded below.
 lemma part_b_lb : ∃ z : ℝ, z ∈ lower_bounds Sii :=
 begin
-  sorry
+  use -2,
+  rw lower_bounds,
+  simp,
+  intro t,
+  intro h,
+  unfold Sii at h,
+  simp at h,
+  by_cases h1: t < -7,
+  rw abs_of_neg at h,
+  rw abs_of_neg at h,
+  linarith,
+  linarith,
+  linarith,
+  by_cases h2: t ≥ 3,
+  linarith,
+  rw abs_of_neg at h,
+  rw abs_of_nonneg at h,
+  linarith,
+  push_neg at h1,
+  linarith,
+  linarith,
 end
 
-lemma part_b_glb : is_glb Sii 37 :=
+-- -2 is a greatest lower bound.
+lemma part_b_glb : is_glb Sii (-2) :=
 begin
-  sorry
+  rw is_glb,
+  rw is_greatest,
+  split,
+  rw lower_bounds,
+  simp,
+  intro t,
+  intro h,
+  unfold Sii at h,
+  simp at h,
+  by_cases h1: t < -7,
+  rw abs_of_neg at h,
+  rw abs_of_neg at h,
+  linarith,
+  linarith,
+  linarith,
+  by_cases h2: t ≥ 3,
+  linarith,
+  rw abs_of_neg at h,
+  rw abs_of_nonneg at h,
+  linarith,
+  push_neg at h1,
+  linarith,
+  linarith,
+  rw upper_bounds,
+  simp,
+  intro n,
+  intro h,
+  rw lower_bounds at h,
+  simp at h,
+  unfold Sii at h,
+  by_contra h1,
+  push_neg at h1,
+  by_cases p: n≤ (-1),
+  let t:= n+2,
+  have ht: -2+t = n,
+    simp [t],
+  let k:= -2 + (t/2),
+  have l1: n ≤ k,
+  apply h,
+  simp [k],
+  rw abs_of_neg,
+  rw abs_of_pos,
+  linarith,
+  linarith,
+  linarith,
+  simp [k] at l1,
+  linarith,
+  push_neg at p,
+  have l: n≤ (-1),
+  apply h,
+  simp,
+  rw abs_of_neg,
+  rw abs_of_pos,
+  linarith,
+  linarith,
+  linarith,
+  linarith,
 end
 
 def Siii : set ℝ := {x | x^3 - 3*x < 0}
 
 lemma part_c_ub : ∃ z : ℝ, z ∈ upper_bounds Siii :=
 begin
-  sorry
+  use (real.sqrt 3),
+  rw upper_bounds,
+  simp,
+  intro n,
+  intro h,
+  unfold Siii at h,
+  simp at h,
+  by_cases p: 0 < n,
+  have l:= div_lt_div_of_lt p h,
+  rw mul_div_assoc at l,
+  rw div_self at l,
+  simp at l,
+  have k: 1+2 = 3,
+  norm_num,
+  rw ← k at l,
+  
+
+
 end
+
 
 lemma part_c_lub : is_lub Siii 37 :=
 begin
