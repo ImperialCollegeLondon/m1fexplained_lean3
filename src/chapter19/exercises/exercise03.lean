@@ -13,10 +13,11 @@ def g : ℝ → ℝ := λ x, x^2+x+3
 example (f : ℝ → ℝ) : ((g ∘ f) = λ x, x^2-3*x+5) ↔ ∀ x, f x = x - 2 ∨ f x = - x + 1 :=
 begin
   simp [function.funext_iff, g],
+  apply forall_congr,
+  intro x,
   split,
   {
-    intros h x,
-    specialize h x,
+    intro h,
     let y := f x,
     have : y^2 + y + 3 = x^2 - 3 * x + 5 → y = x - 2 ∨ y = -x + 1,
     {
@@ -35,8 +36,7 @@ begin
     exact this,
   },
   {
-    intros h x,
-    specialize h x,
+    intro h,
     cases h with h1 h2,
     simp [h1],
     ring,
