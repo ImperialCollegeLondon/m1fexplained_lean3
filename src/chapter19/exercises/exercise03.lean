@@ -23,27 +23,17 @@ begin
     {
       intro h,
       have h' : y^2 + y + 3 = x^2 - 3 * x + 5 ↔ (y - (x - 2)) * (y - (-x + 1)) = 0,
-      {
-        split,
-        intro h,
-        nlinarith,
-        intro h, 
-        nlinarith,
-      },
+      {split; intro h; nlinarith},
       simpa [h', zero_eq_mul, sub_eq_zero] using h,
     },
     specialize this h,
     exact this,
   },
   {
-    intro h,
-    cases h with h1 h2,
-    simp [h1],
-    ring,
-    simp [h2],
+    rintro (h | h);
+    simp [h] at *;
     ring,
   },
 end
-
 
 
