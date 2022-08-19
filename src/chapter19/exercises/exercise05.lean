@@ -17,6 +17,8 @@ must be two integers such that one divides the other.
 import tactic
 import combinatorics.pigeonhole
 
+open function 
+
 lemma parta (S : finset ℤ) (hS : S.card = 6) : ∃ a b ∈ S, a ≠ b ∧ (5 : ℤ) ∣ a - b :=
 begin
   let f : ℤ → ℤ := λ z, z % 5, 
@@ -82,9 +84,26 @@ begin
 end
 
 -- I think that this version of part (b) is more appropriate for doing part (c)
-lemma partb' (n : ℕ) (hn : 0 < n) (S : fin (n + 1) → ℤ) : ∃ a b : fin (n + 1), a ≠ b ∧ (n : ℤ) ∣ a - b :=
+lemma partb' (n : ℕ) (hn : 0 < n) (S : fin (n + 1) → ℤ) : ∃ a b : fin (n + 1), a ≠ b ∧ (n : ℤ) ∣ S a - S b :=
 begin
-  sorry
+  -- this stronger version can be split into two cases
+  have hs : injective S ∨ ¬ injective S,
+  {finish},
+  cases hs with h1 h2,
+  {
+    sorry,
+  },
+  {
+    unfold injective at h2,
+    push_neg at h2,
+    rcases h2 with ⟨a, b, h⟩,
+    use a,
+    use b,
+    cases h with hp hq,
+    split,
+    exact hq,
+    simp [hp],
+  },
 end
 
 open_locale big_operators

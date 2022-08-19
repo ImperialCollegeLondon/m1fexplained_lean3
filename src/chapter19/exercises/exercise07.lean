@@ -10,14 +10,18 @@ open_locale classical
 
 -- replace 37 with the right number
 lemma parta (S T : Type) [fintype S] [fintype T] (hS : fintype.card S = 3) (hT : fintype.card T = 5) :
-  fintype.card (S → T) = 37 :=
+  fintype.card (S → T) = 125 :=
 begin
-  sorry
+  simp only [fintype.card_fun],
+  simp [hS, hT],
+  norm_num,
 end
+
+#check fintype.card
 
 -- replace 37 with the right number
 lemma parta' (S T : Type) [fintype S] [fintype T] (hS : fintype.card S = 3) (hT : fintype.card T = 5) :
-  fintype.card {f : S → T // function.injective f} = 37 :=
+  fintype.card {f : S → T // function.injective f} = 60 :=
 begin
   sorry
 end
