@@ -287,7 +287,7 @@ begin
 end
 
 
-lemma part_c_lub : is_lub Siii 37 :=
+lemma part_c_lub : is_lub Siii (real.sqrt 3) :=
 begin
   sorry
 end
