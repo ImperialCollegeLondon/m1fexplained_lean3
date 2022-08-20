@@ -241,6 +241,7 @@ end
 
 def Siii : set ℝ := {x | x^3 - 3*x < 0}
 
+-- Siii is bounded above.
 lemma part_c_ub : ∃ z : ℝ, z ∈ upper_bounds Siii :=
 begin
   use (real.sqrt 3),
@@ -258,9 +259,31 @@ begin
   have k: 1+2 = 3,
   norm_num,
   rw ← k at l,
-  
-
-
+  rw pow_add at l,
+  simp at l,
+  rw mul_comm at l,
+  rw mul_div_assoc at l,
+  rw div_self at l,
+  simp at l,
+  have l1: 3 = (real.sqrt 3) ^ 2,
+  norm_num,
+  rw l1 at l,
+  rw sq_lt_sq at l,
+  have p1: 0 ≤ n,
+  linarith,
+  rw ← abs_eq_self at p1,
+  rw p1 at l,
+  have p2: 0≤ real.sqrt 3,
+  exact real.sqrt_nonneg 3,
+  rw ← abs_eq_self at p2,
+  rw p2 at l,
+  linarith,
+  linarith,
+  linarith,
+  push_neg at p,
+  have p2: 0≤ real.sqrt 3,
+  exact real.sqrt_nonneg 3,
+  linarith,
 end
 
 
