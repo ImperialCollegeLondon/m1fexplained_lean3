@@ -43,40 +43,37 @@ begin
   rw h,
   simp [fintype.card_embedding_eq, hS, hT],
   clear hS hT h _inst_1 _inst_2,
-  rw [nat.desc_factorial_eq_div, nat.div_eq_of_eq_mul_right ((n - m).factorial_pos)],
-  swap,
-  exact hmn,
-  sorry,
-end 
-
--- attempt to solve the sorry above
-example (a b : ℕ) (hab : b ≤ a): a.desc_factorial b = ∏ i in finset.Icc (a - b + 1) a, i :=
-begin
-  rw [nat.desc_factorial_eq_div, nat.div_eq_of_eq_mul_right ((a - b).factorial_pos)],
-  swap,
-  exact hab,
-  induction a,
+  induction m,
   simp,
-  rcases lt_trichotomy b a_n with h1 | h2 | h3,
+  have hm : m_n ≤ n,
   {
-    have := le_of_lt h1,
-    specialize a_ih this,
-    sorry
+    exact nat.le_of_succ_le hmn,
   },
+  specialize m_ih hm,
+  simp [nat.desc_factorial_succ, m_ih, nat.succ_eq_add_one],
+  have p : insert (n - m_n) (finset.Icc (n - m_n + 1) n) = finset.Icc (n - (m_n + 1) + 1) n,
   {
-    have := (eq.symm h2).ge,
-    specialize a_ih this,
-    sorry
+    ext c,
+    split,
+    { intro hc,
+      simp at *,
+      cases hc with hc1 hc2,
+      { subst hc1,
+        simp,
+        linarith, },
+      { simp [hc2],
+        linarith [hc2.1], }},
+    { intro hc,
+      simp at *,
+      simp [hc],
+      cases hc with hc1 hc2,
+      by_cases n - m_n + 1 ≤ c,
+      { right,
+        exact h, },
+      { push_neg at h,
+        left,
+        linarith, }},
   },
-  {
-    have hb : b = a_n.succ, 
-    {
-      rw [nat.lt_iff_add_one_le] at h3, 
-      exact ge_antisymm h3 hab,
-    },
-    simp [hb],
-    sorry,
-  },
-end
-
-
+  rw ← p,
+  simp,
+end 
