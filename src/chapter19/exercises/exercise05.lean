@@ -83,6 +83,7 @@ begin
   exact (int.modeq.symm h).dvd,
 end
 
+
 -- I think that this version of part (b) is more appropriate for doing part (c)
 lemma partb' (n : ℕ) (hn : 0 < n) (S : fin (n + 1) → ℤ) : ∃ a b : fin (n + 1), a ≠ b ∧ (n : ℤ) ∣ S a - S b :=
 begin
@@ -91,7 +92,30 @@ begin
   {finish},
   cases hs with h1 h2,
   {
-    sorry,
+    --apply partb,
+    have hS : (finset.image S _).card = n + 1,
+    {
+      suffices :  (finset.image S _).card = fintype.card (fin (n + 1)),
+      rw this,
+      exact fintype.card_fin (n + 1),
+      apply finset.card_image_of_injective,
+      exact h1,
+    },
+    have p := partb n hn _ hS,
+    rcases p with ⟨a, ha, b, hb, p⟩,
+    simp at ha,
+    simp at hb,
+    cases ha with a1 ha1,
+    cases hb with b1 hb1,
+    refine ⟨a1, b1, _⟩,
+    cases p with p1 p2,
+    subst ha1,
+    subst hb1,
+    simp [p2],
+    dsimp [function.injective] at h1,
+    intro q,
+    apply p1,
+    rwa q,
   },
   {
     unfold injective at h2,
