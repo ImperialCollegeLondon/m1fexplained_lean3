@@ -36,7 +36,7 @@ begin
   norm_num,
 end
 
--- 7 is a least upper bound.
+-- 7 is the least upper bound.
 lemma part_a_lub : is_lub Si 7 :=
 begin
   rw is_lub,
@@ -177,7 +177,7 @@ begin
   linarith,
 end
 
--- -2 is a greatest lower bound.
+-- -2 is the greatest lower bound.
 lemma part_b_glb : is_glb Sii (-2) :=
 begin
   rw is_glb,
@@ -286,10 +286,129 @@ begin
   linarith,
 end
 
+-- a lemma
+lemma part_c_lemma1 : (real.sqrt 3) ∈ upper_bounds Siii :=
+begin
+  rw upper_bounds,
+  simp,
+  intro n,
+  intro h,
+  unfold Siii at h,
+  simp at h,
+  by_cases p: 0 < n,
+  have l:= div_lt_div_of_lt p h,
+  rw mul_div_assoc at l,
+  rw div_self at l,
+  simp at l,
+  have k: 1+2 = 3,
+  norm_num,
+  rw ← k at l,
+  rw pow_add at l,
+  simp at l,
+  rw mul_comm at l,
+  rw mul_div_assoc at l,
+  rw div_self at l,
+  simp at l,
+  have l1: 3 = (real.sqrt 3) ^ 2,
+  norm_num,
+  rw l1 at l,
+  rw sq_lt_sq at l,
+  have p1: 0 ≤ n,
+  linarith,
+  rw ← abs_eq_self at p1,
+  rw p1 at l,
+  have p2: 0≤ real.sqrt 3,
+  exact real.sqrt_nonneg 3,
+  rw ← abs_eq_self at p2,
+  rw p2 at l,
+  linarith,
+  linarith,
+  linarith,
+  push_neg at p,
+  have p2: 0≤ real.sqrt 3,
+  exact real.sqrt_nonneg 3,
+  linarith,
+end
 
+-- Square root 3 is the least upper bound.
 lemma part_c_lub : is_lub Siii (real.sqrt 3) :=
 begin
-  sorry
+  rw is_lub,
+  rw is_least,
+  split,
+  exact part_c_lemma1,
+  rw lower_bounds,
+  simp,
+  intro n,
+  intro h1,
+  rw upper_bounds at h1,
+  unfold Siii at h1,
+  simp at h1,
+  by_contra,
+  push_neg at h,
+  by_cases p: (3/2 : ℝ) ≤ n,
+  let t:= real.sqrt 3 - n,
+  have ht: real.sqrt 3 - t = n,
+    simp [t],
+  let k:= real.sqrt 3 - (t/2),
+  have l: k ^3 < 3 * k,
+  have l2: 0 < k,
+  simp [k],
+  simp [t],
+  linarith,
+  have l3: k ^2 < 3,
+  simp [k],
+  rw sub_sq,
+  rw real.sq_sqrt,
+  have l4: real.sqrt 3 ≤ real.sqrt 4,
+  have l5: (3 :ℝ) ≤ (4 :ℝ) ,
+  norm_num,
+  exact real.sqrt_le_sqrt l5,
+  have l6: (4 :ℝ) = (2 :ℝ) * (2 :ℝ),
+  norm_num,
+  rw l6 at l4,
+  have l7: 0 ≤ (2 :ℝ),
+  norm_num,
+  rw real.sqrt_mul_self l7 at l4,
+  have l8: (t/2) < 1,
+  simp [t],
+  linarith,
+  rw sq,
+  have l9: 0 < real.sqrt 3,
+  linarith,
+  have l10: 1 < real.sqrt 3,
+  linarith,
+  have l11: 0 < (t/2),
+  linarith,
+  have l12: -(2 * (real.sqrt 3)) * (t/2) + (t/2) * (t/2) < 0,
+  rw ← right_distrib,
+  have l13: -(2 * (real.sqrt 3)) + (t/2) < 0,
+  linarith,
+  exact mul_neg_of_neg_of_pos l13 l11,
+  linarith,
+  linarith,
+  have l4: k ^ 2 * k < 3 * k,
+  exact mul_lt_mul_of_pos_right l3 l2,
+  have l5: 1+2 = 3,
+  norm_num,
+  rw ← l5,
+  rw pow_add,
+  simp,
+  rw mul_comm,
+  exact l4,
+  have h2 := h1 l,
+  have h3 : n < k,
+  have h4: 0 < t,
+  linarith,
+  simp [k],
+  rw ← ht,
+  linarith,
+  linarith,
+  push_neg at p,
+  have ll: (3/2 : ℝ) ^ 3 < 3 * (3/2 : ℝ),
+  norm_num,
+  have h2 := h1 ll,
+  linarith,
 end
 
 lemma part_c_lb : ∃ z : ℝ, z ∈ lower_bounds Siii :=
