@@ -411,14 +411,49 @@ begin
   linarith,
 end
 
-lemma part_c_lb : ∃ z : ℝ, z ∈ lower_bounds Siii :=
+-- Siii is not bounded below.
+lemma part_c_lb : ¬∃ z : ℝ, z ∈ lower_bounds Siii :=
 begin
-  sorry
-end
-
-lemma part_c_glb : is_glb Siii 37 :=
-begin
-  sorry
+  push_neg,
+  intro n,
+  rw lower_bounds,
+  simp,
+  by_cases h: (-2) < n,
+  use (-2),
+  split,
+  unfold Siii,
+  simp,
+  linarith,
+  exact h,
+  push_neg at h,
+  use (n-1),
+  split,
+  unfold Siii,
+  simp,
+  have k: 1+2 = 3,
+  norm_num,
+  rw ← k ,
+  rw pow_add,
+  simp,
+  rw mul_comm,
+  have l1: n-1 < 0,
+  linarith,
+  apply mul_lt_mul_of_neg_right,
+  have l2: n-1 < -2,
+  linarith,
+  have l3: 2^2 < (n-1)^2,
+  rw sq_lt_sq,
+  rw abs_of_pos,
+  rw abs_of_neg,
+  linarith,
+  exact l1,
+  norm_num,
+  have l4: (2: ℝ) ^ 2 = 4,
+  norm_num,
+  rw l4 at l3,
+  linarith,
+  exact l1,
+  linarith,
 end
 
 def Siv : set ℝ := {x | ∃ a b : pnat, x = a^2 + b^2}.
