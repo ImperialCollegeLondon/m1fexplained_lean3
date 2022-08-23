@@ -156,7 +156,14 @@ begin
       exact hn, },
   },
   { -- b < a case
-    sorry
+    use finset.Ico b a,
+    refine ⟨_, _, _⟩,
+    { rw finset.range_eq_Ico,
+      rw finset.Ico_subset_Ico_iff hab,
+      exact ⟨zero_le b, ha⟩, },
+    { rwa finset.nonempty_Ico, },
+    { rw finset.sum_Ico hab.le,
+      exact hn, },
   },
 end
 
@@ -192,16 +199,12 @@ begin
   rw finset.one_lt_card at hy2,
   rcases hy2 with ⟨A, hA, B, hB, hAB⟩,
   rw finset.mem_filter at hA hB,
-  cases hB with hB1 hB2,
-  cases hA with hA1 hA2,
   use A,
   use B,
-  simp [hAB],
-  rw [finset.mem_powerset_len] at *,
-  simp [hA1, hB1],
-  rw ← hB2 at hA2,
-  simp [g] at hA2,
-  simp [hA2],
+  rw [finset.mem_powerset_len] at hA hB,
+  simp [hAB, hA.1, hB.1],
+  simp [g] at hA hB,
+  rw [hA.2, hB.2],
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
@@ -225,18 +228,39 @@ begin
   {
     -- consider powerset of T
     let P := finset.powerset T,
-    let F := finset.Icc 0 414,
+    let F := finset.Icc (0:ℤ) 414,
     have hPF : F.card * 1 < P.card,
     {
       simp [nat.card_Icc, finset.card_powerset, hTcard],
-      linarith,
+      norm_num,
     },
     -- find a map from P to F by summing elements in P
     let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
-    -- let g : P → F :=  λ x, ∑ i in (x : finset ℤ), i,
-    -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-    -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
-    sorry
+    have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
+    {
+      intros p hp,
+      simp [g],
+      rw finset.mem_powerset at hp,
+      split,
+      {
+        sorry
+      },
+      {
+        sorry
+      },
+    },
+    have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hPF,
+    dsimp at this,
+    rcases this with ⟨y, hy1, hy2⟩,
+    rw finset.one_lt_card at hy2,
+    rcases hy2 with ⟨C, hC, D, hD, hCD⟩,
+    rw finset.mem_filter at hC hD,
+    use C,
+    use D,
+    rw [finset.mem_powerset] at hC hD,
+    simp [hCD, hC.1, hD.1],
+    simp [g] at hC hD,
+    rw [hC.2, hD.2],
   },
 end
 
