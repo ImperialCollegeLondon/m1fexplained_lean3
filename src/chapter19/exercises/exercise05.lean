@@ -127,7 +127,7 @@ end
 
 open_locale big_operators
 
-lemma partc (n : ℕ) (hn : 0 < n) (a : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, a i :=
+lemma partc (n : ℕ) (hn : 0 < n) (f : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, f i :=
 begin
   rcases (partb' n hn (fin.partial_sum f)) with ⟨a, b, hab⟩,
   rw ne_iff_lt_or_gt at hab,
