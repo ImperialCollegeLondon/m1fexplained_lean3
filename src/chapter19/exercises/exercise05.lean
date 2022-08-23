@@ -16,6 +16,7 @@ must be two integers such that one divides the other.
 -/
 import tactic
 import combinatorics.pigeonhole
+import algebra.big_operators.fin
 
 open function 
 
@@ -128,11 +129,29 @@ open_locale big_operators
 
 lemma partc (n : ℕ) (hn : 0 < n) (a : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, a i :=
 begin
-  let T : fin (n + 1) → ℤ := λ x, (∑ i : fin n, if x ≤ i then 0 else a i),
-  have p := partb' n hn T,
-  rcases p with ⟨a, b, hab⟩,
-
-  sorry
+  rcases (partb' n hn (fin.partial_sum f)) with ⟨a, b, hab⟩,
+  rw ne_iff_lt_or_gt at hab,
+  obtain ⟨c, hc⟩ : ∃ (c : ℕ), c.succ = n := by refine ⟨(n - 1), by omega⟩,
+  haveI : has_zero (fin n),
+  { subst hc,
+    exact fin.has_zero, },
+  let g := λ (i : fin n), if a ≤ i ∧ ↑i < b then i else 0,
+  refine ⟨finset.image g (finset.univ : finset (fin n)), _⟩,
+  simp only [ne.def, finset.image_eq_empty],
+  refine ⟨top_ne_bot, _⟩,
+  have hT : fin.partial_sum f a - fin.partial_sum f b = ∑ i : fin n, f (g i),
+  { dsimp [fin.partial_sum],
+    repeat {rw list.sum_take_of_fn},
+    simp only [fin.val_eq_coe, finset.sum_filter],
+    dsimp [g],
+    
+    sorry},
+  rw hT at hab,
+  have goal : (finset.image g finset.univ).sum f = ∑ (i : fin n), f (g i),
+  { 
+    sorry},
+  rw goal,
+  exact hab.2,
 end
 
 lemma partd (S : finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) (hScard : S.card = 10) : ∃ A B : finset ℤ,
