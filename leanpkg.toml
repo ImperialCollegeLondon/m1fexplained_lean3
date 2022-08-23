@@ -1,8 +1,8 @@
 [package]
 name = "m1fexplained"
 version = "0.1"
-lean_version = "leanprover-community/lean:3.45.0"
+lean_version = "leanprover-community/lean:3.46.0"
 path = "src"
 
 [dependencies]
-mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "bae872c3b7234f3aef80755d0f2ece656a7a43cd"}
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "f089486a9af40d019f9ecf7d86a055eb2801124b"}
