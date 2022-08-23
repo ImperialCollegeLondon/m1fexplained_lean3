@@ -160,18 +160,24 @@ begin
   -- consider possibilities for subset of S with card 5
   let P := finset.powerset_len 5 S,
   -- consider possibilities for sum
-  let F := finset.Icc 15 240,
+  let F := finset.Icc (15 : ℤ) 240,
   have hFP : F.card * 1 < P.card,
   {
     simp [nat.card_Icc, finset.card_powerset_len 5 S, hScard],
     have h : (10 : ℕ).choose 5 = 252,
     {refl},
     simp [h],
+    norm_num,
   },
-  -- find a function that maps P to F by taking sums of elements in the set
-  -- let g : P → F := λ x, ⟨∑ i in (x : finset ℤ), i, sorry⟩,
-  -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-  -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
+  let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
+  have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
+  { sorry },
+  have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
+  dsimp at this,
+  rcases this with ⟨y, hy1, hy2⟩,
+  rw finset.one_lt_card at hy2,
+  rcases hy2 with ⟨A, hA, B, hB, hAB⟩,
+  rw finset.mem_filter at hA hB,
   sorry
 end
 
