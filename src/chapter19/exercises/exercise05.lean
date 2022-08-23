@@ -139,6 +139,8 @@ begin
   refine ⟨finset.image g (finset.univ : finset (fin n)), _⟩,
   simp only [ne.def, finset.image_eq_empty],
   refine ⟨top_ne_bot, _⟩,
+  by_cases a < b,
+  {
   have hT : fin.partial_sum f a - fin.partial_sum f b = ∑ i : fin n, f (g i),
   { dsimp [fin.partial_sum],
     repeat {rw list.sum_take_of_fn},
@@ -152,6 +154,10 @@ begin
     sorry},
   rw goal,
   exact hab.2,
+  },
+  {
+    sorry
+  },
 end
 
 lemma partd (S : finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) (hScard : S.card = 10) : ∃ A B : finset ℤ,
