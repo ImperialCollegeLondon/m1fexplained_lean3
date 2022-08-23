@@ -281,8 +281,7 @@ lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (h
 begin
   -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A\B and B\A
   suffices h : ∃ C D : finset ℤ, C ≤ T ∧ D ≤ T ∧ C ≠ D ∧ ∑ i in C, i = ∑ j in D, j,
-  {
-    -- let A = C - (C ∩ D), B = D - (C ∩ D),
+  { -- let A = C - (C ∩ D), B = D - (C ∩ D),
     rcases h with ⟨C, D, hC, hD, hCD, h⟩,
     let A : finset ℤ := C \ D,
     let B : finset ℤ := D \ C,
@@ -300,32 +299,32 @@ begin
     suffices : ∑ (i : ℤ) in A, i + ∑ (x : ℤ) in X, x = ∑ (j : ℤ) in B, j + ∑ (x : ℤ) in X, x,
     exact (add_left_inj (∑ (x : ℤ) in X, x)).mp this,
     convert h,
-    { 
-      suffices : C = A ∪ X, 
+    { suffices : C = A ∪ X, 
       { rw this,
         rw ←  finset.sum_union,
         exact finset.disjoint_sdiff_inter C D, },
       ext x,
       simp only [finset.mem_union, finset.mem_sdiff, finset.mem_inter, ← and_or_distrib_left],
       tauto, },
-    { 
-      sorry
-    },
-  },
-  {
-    -- consider powerset of T
+    { suffices : D = B ∪ X,
+      { rw this,
+        rw ← finset.sum_union,
+        change disjoint B (C ∩ D),
+        rw finset.inter_comm C D,
+        exact finset.disjoint_sdiff_inter D C, },
+      { ext x,
+        simp only [finset.mem_union, finset.mem_sdiff, finset.mem_inter, ← and_or_distrib_left],
+        tauto, }, }, },
+  { -- consider powerset of T
     let P := finset.powerset T,
     let F := finset.Icc (0:ℤ) 414,
     have hPF : F.card * 1 < P.card,
-    {
-      simp [nat.card_Icc, finset.card_powerset, hTcard],
-      norm_num,
-    },
+    { simp [nat.card_Icc, finset.card_powerset, hTcard],
+      norm_num, },
     -- find a map from P to F by summing elements in P
     let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
     have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-    {
-      intros p hp,
+    { intros p hp,
       simp [g],
       rw finset.mem_powerset at hp,
       split,
@@ -352,8 +351,7 @@ begin
     rw [finset.mem_powerset] at hC hD,
     simp [hCD, hC.1, hD.1],
     simp [g] at hC hD,
-    rw [hC.2, hD.2],
-  },
+    rw [hC.2, hD.2],  },
 end
 
 lemma partf (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℤ,
@@ -381,9 +379,6 @@ end
 example (T Q: finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hQ : ∀ q ∈ Q, (q ≤ (199:ℤ) ∧ ( ¬ 2 ∣ q))): 
   ∀ t : ℤ, t ∈ T → ∃ k : ℕ, ∃ q ∈ Q, (t = 2^k * q) :=
 begin
-  intros t ht,
-  specialize hT t ht,
-  cases hT with h1 h2,
-  -- find the odd divisor of t
-  sorry,
+  sorry
 end
+
