@@ -382,11 +382,6 @@ begin
   sorry
 end
 
-example (C D : finset ℤ) : C = (C \ D) ∪ (C ∩ D) :=
-begin
-  sorry
-end
-
 example (T Q: finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hQ : ∀ q ∈ Q, (q ≤ (199:ℤ) ∧ ( ¬ 2 ∣ q))): 
   ∀ t : ℤ, t ∈ T → ∃ k : ℕ, ∃ q ∈ Q, (t = 2^k * q) :=
 begin
