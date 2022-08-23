@@ -277,7 +277,7 @@ begin
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
-  A ≤ T ∧ B ≤ T ∧ A ∩ B = ∅ ∧ ∑ i in A, i = ∑ j in B, j :=
+  A ≤ T ∧ B ≤ T ∧ disjoint A B ∧ ∑ i in A, i = ∑ j in B, j :=
 begin
   -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A/B and B/A
   suffices h : ∃ C D : finset ℤ, C ≤ T ∧ D ≤ T ∧ C ≠ D ∧ ∑ i in C, i = ∑ j in D, j,
@@ -294,10 +294,7 @@ begin
     have hB : B ≤ T := le_trans hBD hD,
     split, exact hA,
     split, exact hB,
-    have hAB : A ∩ B = ∅,
-    {
-      sorry
-    },
+    have hAB : disjoint A B := disjoint_sdiff_sdiff,
     simp [hAB],
     let X := C ∩ D,
     suffices : ∑ (i : ℤ) in A, i + ∑ (x : ℤ) in X, x = ∑ (j : ℤ) in B, j + ∑ (x : ℤ) in X, x,
