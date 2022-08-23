@@ -210,7 +210,7 @@ end
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
   A ≤ T ∧ B ≤ T ∧ A ∩ B = ∅ ∧ ∑ i in A, i = ∑ j in B, j :=
 begin
-  -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A/B and B/A
+  -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A\B and B\A
   suffices h : ∃ C D : finset ℤ, C ≤ T ∧ D ≤ T ∧ C ≠ D ∧ ∑ i in C, i = ∑ j in D, j,
   {
     -- let A = C - (C ∩ D), B = D - (C ∩ D),
@@ -235,7 +235,21 @@ begin
     exact (add_left_inj (∑ (x : ℤ) in X, x)).mp this,
     convert h,
     {
-      sorry
+      suffices : C = A ∪ X,
+      rw this,
+      rw ←  finset.sum_union,
+      exact finset.disjoint_sdiff_inter C D,
+      ext a,
+      rw [finset.mem_union],
+      split,
+      {
+        intro ha,
+        sorry
+      },
+      { intro ha,
+        cases ha with ha1 ha2,
+        exact hAC ha1,
+        exact finset.mem_of_mem_inter_left ha2, },
     },
     {
       sorry
@@ -300,4 +314,19 @@ begin
   -- have hg : ∀ q ∈ Q, (f q) ∈ T,
   -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
   sorry
+end
+
+example (C D : finset ℤ) : C = (C \ D) ∪ (C ∩ D) :=
+begin
+  sorry
+end
+
+example (T Q: finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hQ : ∀ q ∈ Q, (q ≤ (199:ℤ) ∧ ( ¬ 2 ∣ q))): 
+  ∀ t : ℤ, t ∈ T → ∃ k : ℕ, ∃ q ∈ Q, (t = 2^k * q) :=
+begin
+  intros t ht,
+  specialize hT t ht,
+  cases hT with h1 h2,
+  -- find the odd divisor of t
+  sorry,
 end
