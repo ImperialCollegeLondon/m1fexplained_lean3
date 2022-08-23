@@ -171,7 +171,12 @@ begin
   },
   let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
   have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-  { sorry },
+  { 
+    intros p hp,
+    simp [g],
+    -- apply finset.mem_powerset,
+    sorry
+  },
   have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
   dsimp at this,
   rcases this with ⟨y, hy1, hy2⟩,
