@@ -178,7 +178,35 @@ begin
   rw finset.one_lt_card at hy2,
   rcases hy2 with ⟨A, hA, B, hB, hAB⟩,
   rw finset.mem_filter at hA hB,
-  sorry
+  cases hB with hB1 hB2,
+  cases hA with hA1 hA2,
+  use A,
+  use B,
+  simp [hAB],
+  have hAcard : A.card = 5,
+  {
+    -- apply finset.mem_powerset_len,
+    sorry
+  },
+  have hBcard : B.card = 5,
+  {
+    sorry
+  },
+  have h : ∑ (i : ℤ) in A, i = ∑ (j : ℤ) in B, j,
+  {
+    suffices : g A = g B,
+    simpa [g] using this,
+    simp [hB2, hA2],
+  },
+  simp [hAcard, hBcard, h],
+  split,
+  {
+    -- finset.mem_powerset,
+    sorry
+  },
+  {
+    sorry
+  },
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
