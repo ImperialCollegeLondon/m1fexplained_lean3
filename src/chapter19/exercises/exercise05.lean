@@ -215,15 +215,31 @@ begin
   {
     -- let A = C - (C ∩ D), B = D - (C ∩ D),
     rcases h with ⟨C, D, hC, hD, hCD, h⟩,
-    let A := C \ D,
-    let B := D \ C,
+    let A : finset ℤ := C \ D,
+    let B : finset ℤ := D \ C,
     use A,
     use B,
-    -- rw finset.mem_sdiff, -- example of a theorem about sdiff
-    -- `mem` is `∈`
-    -- `sdiff` is `\` 
-
-    sorry,
+    have hAC : A ≤ C, apply finset.sdiff_subset,
+    have hBD : B ≤ D, apply finset.sdiff_subset,
+    have hA : A ≤ T := le_trans hAC hC,
+    have hB : B ≤ T := le_trans hBD hD,
+    split, exact hA,
+    split, exact hB,
+    have hAB : A ∩ B = ∅,
+    {
+      sorry
+    },
+    simp [hAB],
+    let X := C ∩ D,
+    suffices : ∑ (i : ℤ) in A, i + ∑ (x : ℤ) in X, x = ∑ (j : ℤ) in B, j + ∑ (x : ℤ) in X, x,
+    exact (add_left_inj (∑ (x : ℤ) in X, x)).mp this,
+    convert h,
+    {
+      sorry
+    },
+    {
+      sorry
+    },
   },
   {
     -- consider powerset of T
@@ -285,4 +301,3 @@ begin
   -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
   sorry
 end
-
