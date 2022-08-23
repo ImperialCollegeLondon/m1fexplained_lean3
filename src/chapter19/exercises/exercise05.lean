@@ -168,20 +168,23 @@ begin
   -- consider possibilities for sum
   let F := finset.Icc (15 : ℤ) 240,
   have hFP : F.card * 1 < P.card,
-  {
-    simp [nat.card_Icc, finset.card_powerset_len 5 S, hScard],
+  { simp [nat.card_Icc, finset.card_powerset_len 5 S, hScard],
     have h : (10 : ℕ).choose 5 = 252,
     {refl},
     simp [h],
-    norm_num,
-  },
+    norm_num, },
   let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
   have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-  { 
-    intros p hp,
+  { intros p hp,
     simp [g],
-    -- apply finset.mem_powerset,
-    sorry
+    rw finset.mem_powerset_len at hp,
+    split,
+    {
+      sorry
+    },
+    {
+      sorry
+    },
   },
   have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
   dsimp at this,
@@ -194,30 +197,11 @@ begin
   use A,
   use B,
   simp [hAB],
-  have hAcard : A.card = 5,
-  {
-    -- apply finset.mem_powerset_len,
-    sorry
-  },
-  have hBcard : B.card = 5,
-  {
-    sorry
-  },
-  have h : ∑ (i : ℤ) in A, i = ∑ (j : ℤ) in B, j,
-  {
-    suffices : g A = g B,
-    simpa [g] using this,
-    simp [hB2, hA2],
-  },
-  simp [hAcard, hBcard, h],
-  split,
-  {
-    -- finset.mem_powerset,
-    sorry
-  },
-  {
-    sorry
-  },
+  rw [finset.mem_powerset_len] at *,
+  simp [hA1, hB1],
+  rw ← hB2 at hA2,
+  simp [g] at hA2,
+  simp [hA2],
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
@@ -230,6 +214,8 @@ begin
     rcases h with ⟨C, D, hC, hD, hCD, h⟩,
     let A := C \ D,
     let B := D \ C,
+    use A,
+    use B,
     -- rw finset.mem_sdiff, -- example of a theorem about sdiff
     -- `mem` is `∈`
     -- `sdiff` is `\` 
@@ -246,6 +232,7 @@ begin
       linarith,
     },
     -- find a map from P to F by summing elements in P
+    let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
     -- let g : P → F :=  λ x, ∑ i in (x : finset ℤ), i,
     -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
     -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
