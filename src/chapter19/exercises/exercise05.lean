@@ -18,6 +18,8 @@ import tactic
 import combinatorics.pigeonhole
 import algebra.big_operators.fin
 import data.int.succ_pred
+import data.int.parity
+import data.nat.factorization.basic
 
 open function 
 
@@ -354,33 +356,37 @@ begin
     rw [hC.2, hD.2],  },
 end
 
-lemma partf (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℤ,
+lemma partf (T : finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℕ,
   a ∈ T ∧ b ∈ T ∧ a ≠ b ∧ a ∣ b :=
 begin
-  -- claim : every t can be written as 2^k * q for which q is odd
-  have h : ∀ t : ℤ, t ∈ T → ∃ k q : ℕ, (q ≤ 199) ∧ ( ¬ 2 ∣ q) ∧ (t = 2^k * q),
-  {
-    intros t ht,
-    specialize hT t ht,
-    cases hT with h1 h2,
-    -- find the odd divisor of t
-    sorry,
-  },
+  -- claim : every t can be written as 2^k * q for which q is odd, using ord_compl[2] t
   -- there are 100 posibilities for q as every even number can be 'reduced'
-  -- let Q : finset ℤ :=  
-  -- have hTO : T.card * 1 < Q.card
-  -- find a map from Q to T, by considering corresponding 'q'
-  -- let f : Q → T := 
-  -- have hg : ∀ q ∈ Q, (f q) ∈ T,
-  -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
+  let Q : finset ℕ := (finset.Icc 1 200).filter odd,
+  have hQcard : Q.card = 100,
+  {
+    -- Show that it equals (finset.Iio 100).map \<\la n, 2 * n + 1, proof_of_injectivity_here\> and use nat.card_Iio and finset.card_map
+    sorry
+  },
+  have hTO : Q.card * 1 < T.card,
+  { rw [hQcard, hTcard], norm_num, },
+  -- find a map from T to Q, by considering corresponding 'q'
+  let f : ℕ → ℕ := λ z, ord_compl[2] z,
+  have hf : ∀ t ∈ T, (f t) ∈ Q,
+  { intros t ht,
+    squeeze_simp [f],
+    sorry
+  },
+  have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
+  dsimp at this,
+  rcases this with ⟨y, hy1, hy2⟩,
+  rw finset.one_lt_card at hy2,
+  rcases hy2 with ⟨a, ha, b, hb, hab⟩,
+  use a,
+  use b,
   sorry
 end
 
-example (T Q: finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hQ : ∀ q ∈ Q, (q ≤ (199:ℤ) ∧ ( ¬ 2 ∣ q))): 
-  ∀ t : ℤ, t ∈ T → ∃ k : ℕ, ∃ q ∈ Q, (t = 2^k * q) :=
-begin
-  sorry
-end
+
 
 
 
