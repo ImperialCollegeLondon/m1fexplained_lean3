@@ -17,6 +17,7 @@ must be two integers such that one divides the other.
 import tactic
 import combinatorics.pigeonhole
 import algebra.big_operators.fin
+import data.int.succ_pred
 
 open function 
 
@@ -167,6 +168,74 @@ begin
   },
 end
 
+-- should be in mathlib maybe? (thanks Eric Rodriguez)
+def sum_le_max (S : finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, s ≤ x) :
+  ∑ i in S, i ≤ ∑ i in finset.Ioc (x - finset.card S) x, i :=
+begin
+  induction h : finset.card S with k ih generalizing S x,
+  { obtain rfl := finset.card_eq_zero.mp h, simp},
+  have hSn : 0 < S.card := h.symm ▸ k.succ_pos,
+  replace hSn : S.nonempty := finset.card_pos.mp hSn,
+  specialize ih (S.erase (S.max' hSn)) (x - 1) (λ s hs, _) _,
+  { rw [←int.pred, ←int.pred_eq_pred, order.le_pred_iff],
+    obtain ⟨hs₁, hs₂⟩ := finset.mem_erase.1 hs,
+    exact (S.lt_max'_of_mem_erase_max' hSn hs).trans_le (hS' _ $ S.max'_mem hSn) },
+  { simpa [h] using finset.card_erase_of_mem (S.max'_mem hSn) },
+  have : x - 1 - k = x - k.succ,
+  { rw [sub_sub, sub_right_inj],
+    simp [add_comm] },
+  rw this at ih,
+  have hSm : S.max' hSn ≤ x := hS' _ (S.max'_mem hSn),
+  replace ih := add_le_add ih hSm,
+  suffices : finset.Ioc (x - k.succ) (x - 1) = (finset.Ioc (x - k.succ) x).erase x,
+  { rwa [finset.sum_erase_add _ _ $ S.max'_mem hSn, this, finset.sum_erase_add] at ih,
+    simp only [finset.right_mem_Ioc, sub_lt_self_iff],
+    exact nat.cast_pos.mpr (k.succ_pos) },
+  ext,
+  simp only [nat.cast_succ, finset.mem_Ioc, finset.Ioc_erase_right, finset.mem_Ioo,
+             and.congr_right_iff],
+  rintro -,
+  rw [←int.pred, ←int.pred_eq_pred, order.le_pred_iff]
+end
+
+-- should also be in mathlib maybe?
+def min_le_sum (S : finset ℤ) (x : ℤ) (hS' : ∀ s ∈ S, x ≤ s) :
+ ∑ i in finset.Ico x (x + finset.card S), i ≤ ∑ i in S, i :=
+begin
+  have := sum_le_max (finset.image (λ i, -i) S) (-x) _, swap,
+  { intros s hs,
+    rw finset.mem_image at hs,
+    rcases hs with ⟨t, ht, rfl⟩,
+    exact neg_le_neg (hS' t ht), },
+  rw ← neg_le_neg_iff,
+  have Scard : (finset.image has_neg.neg S).card = S.card,
+  { rw finset.card_image_iff,
+    intros x hx y hy,
+    exact neg_inj.1,
+  },
+  convert this,
+  { rw finset.sum_image,
+    symmetry,
+    apply finset.sum_neg_distrib,
+    intros x hx y hy h,
+    rwa neg_inj at h, },
+  { rw ← finset.sum_neg_distrib,
+    apply finset.sum_bij (λ (a : ℤ) ha, -a),
+    { intros a ha,
+      simp only [finset.mem_Ioc, neg_le_neg_iff],
+      rw finset.mem_Ico at ha,
+      rw Scard,
+      cases ha,
+      split;linarith, },
+    { simp, },
+    { simp, },
+    { rw Scard,
+      intros b hb,
+      refine ⟨-b, _, _⟩,
+      { simp at hb ⊢, cases hb, split; linarith, },
+      { simp, }, }, },
+end
+
 lemma partd (S : finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) (hScard : S.card = 10) : ∃ A B : finset ℤ,
   A.card = 5 ∧ B.card = 5 ∧ A ≠ B ∧ A ≤ S ∧ B ≤ S ∧ ∑ i in A, i = ∑ j in B, j :=
 begin
@@ -186,13 +255,13 @@ begin
     simp [g],
     rw finset.mem_powerset_len at hp,
     split,
-    {
-      sorry
+    { convert min_le_sum p 1 (λ s hs, (hS s (hp.1 hs)).1),
+      rw hp.2,
+      refl,
     },
-    {
-      sorry
-    },
-  },
+    { convert sum_le_max p 50 (λ s hs, (hS s (hp.1 hs)).2),
+      rw hp.2,
+      refl, }, },
   have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
   dsimp at this,
   rcases this with ⟨y, hy1, hy2⟩,
