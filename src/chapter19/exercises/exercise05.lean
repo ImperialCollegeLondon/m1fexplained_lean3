@@ -189,7 +189,12 @@ begin
   {
     -- let A = C - (C ∩ D), B = D - (C ∩ D),
     rcases h with ⟨C, D, hC, hD, hCD, h⟩,
-    
+    let A := C \ D,
+    let B := D \ C,
+    -- rw finset.mem_sdiff, -- example of a theorem about sdiff
+    -- `mem` is `∈`
+    -- `sdiff` is `\` 
+
     sorry,
   },
   {
