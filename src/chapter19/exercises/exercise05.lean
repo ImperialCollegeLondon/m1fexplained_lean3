@@ -329,13 +329,18 @@ begin
       simp [g],
       rw finset.mem_powerset at hp,
       split,
-      {
-        sorry
+      { apply finset.sum_nonneg,
+        intros i hi,
+        exact le_trans zero_le_one (hT i (hp hi)).1,
       },
-      {
-        sorry
-      },
-    },
+      { transitivity (∑ i in T, i),
+        { apply finset.sum_le_sum_of_subset_of_nonneg hp,
+          intros i hi _,
+          exact le_trans zero_le_one (hT i hi).1,
+        },
+        { convert sum_le_max T 50 _, 
+          { rw hTcard, refl, },
+          { intros i hi, exact (hT i hi).2, }, } }, },
     have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hPF,
     dsimp at this,
     rcases this with ⟨y, hy1, hy2⟩,
