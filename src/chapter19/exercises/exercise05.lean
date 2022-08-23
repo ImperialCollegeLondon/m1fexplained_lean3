@@ -84,78 +84,78 @@ begin
   exact (int.modeq.symm h).dvd,
 end
 
-
--- I think that this version of part (b) is more appropriate for doing part (c)
-lemma partb' (n : ℕ) (hn : 0 < n) (S : fin (n + 1) → ℤ) : ∃ a b : fin (n + 1), a ≠ b ∧ (n : ℤ) ∣ S a - S b :=
+-- A stronger of part b which should be easier to use
+-- (the point is that f might not be injective on s)
+lemma partb' {ι : Type*} {s : finset ι} (f : ι → ℤ) (hs : s.nonempty) {n : ℕ} (hn : 0 < n)
+  (hs' : n < s.card): ∃ a b ∈ s, a ≠ b ∧ (n : ℤ) ∣ f a - f b :=
 begin
-  -- this stronger version can be split into two cases
-  have hs : injective S ∨ ¬ injective S,
-  {finish},
-  cases hs with h1 h2,
+  let f' : ι → ℤ := λ z, (f z) % n, 
+  let T : finset ℤ := finset.Ico 0 n,
+  have hfT : ∀ z : ι, z ∈ s → (f' z) ∈ T,
   {
-    --apply partb,
-    have hS : (finset.image S _).card = n + 1,
-    {
-      suffices :  (finset.image S _).card = fintype.card (fin (n + 1)),
-      rw this,
-      exact fintype.card_fin (n + 1),
-      apply finset.card_image_of_injective,
-      exact h1,
-    },
-    have p := partb n hn _ hS,
-    rcases p with ⟨a, ha, b, hb, p⟩,
-    simp at *,
-    cases ha with a1 ha1,
-    cases hb with b1 hb1,
-    refine ⟨a1, b1, _⟩,
-    cases p with p1 p2,
-    simp [ha1, hb1, p2],
-    finish,
-  },
-  {
-    unfold injective at h2,
-    push_neg at h2,
-    rcases h2 with ⟨a, b, h⟩,
-    use a,
-    use b,
-    cases h with hp hq,
+    intros z hz,
+    simp only [f', finset.mem_Ico],
+    have hn' : (n : ℤ) ≠ 0, 
+    { norm_cast, exact hn.ne', },
     split,
-    exact hq,
-    simp [hp],
+    { exact int.mod_nonneg _ hn', },
+    { convert int.mod_lt _ hn',
+      simp only [nat.abs_cast], },
   },
+  have hST : T.card * 1 < s.card,
+  { simp [hs'], },
+  obtain ⟨y, hyT, hcard⟩ := 
+    finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hfT hST,
+  rw finset.one_lt_card_iff at hcard,
+  rcases hcard with ⟨a, b, ha, hb, hab⟩,
+  rw finset.mem_filter at ha hb,
+  refine ⟨a, ha.1, b, hb.1, hab, _⟩,
+  dsimp at ha hb,
+  apply int.modeq.dvd,
+  change f' b = f' a,
+  rw [hb.2, ha.2],
 end
 
 open_locale big_operators
 
-lemma partc (n : ℕ) (hn : 0 < n) (f : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, f i :=
+lemma finset.sum_Ico {M : Type*} [add_comm_group M]
+  {a b : ℕ} (h : a ≤ b) (f : ℕ → M) : 
+  ∑ i in finset.Ico a b, f i = ∑ j in finset.range b, f j - ∑ j in finset.range a, f j :=
 begin
-  rcases (partb' n hn (fin.partial_sum f)) with ⟨a, b, hab⟩,
-  rw ne_iff_lt_or_gt at hab,
-  obtain ⟨c, hc⟩ : ∃ (c : ℕ), c.succ = n := by refine ⟨(n - 1), by omega⟩,
-  haveI : has_zero (fin n),
-  { subst hc,
-    exact fin.has_zero, },
-  let g := λ (i : fin n), if a ≤ i ∧ ↑i < b then i else 0,
-  refine ⟨finset.image g (finset.univ : finset (fin n)), _⟩,
-  simp only [ne.def, finset.image_eq_empty],
-  refine ⟨top_ne_bot, _⟩,
-  by_cases a < b,
-  {
-  have hT : fin.partial_sum f a - fin.partial_sum f b = ∑ i : fin n, f (g i),
-  { dsimp [fin.partial_sum],
-    repeat {rw list.sum_take_of_fn},
-    simp only [fin.val_eq_coe, finset.sum_filter],
-    dsimp [g],
-    
-    sorry},
-  rw hT at hab,
-  have goal : (finset.image g finset.univ).sum f = ∑ (i : fin n), f (g i),
-  { 
-    sorry},
-  rw goal,
-  exact hab.2,
+  rw eq_sub_iff_add_eq,
+  rw ← finset.sum_union,
+  { apply finset.sum_congr _ (λ x _, rfl),
+    rw finset.range_eq_Ico,
+    rw finset.union_comm,
+    rw finset.Ico_union_Ico_eq_Ico (nat.zero_le a) h,
   },
-  {
+  { rintros x (hx : x ∈ _ ∩ _),
+    rw [finset.mem_inter, finset.mem_Ico, finset.mem_range] at hx,
+    rcases hx with ⟨⟨h1, _⟩, h2⟩,
+    exact false.elim (h1.not_lt h2), },
+end
+
+lemma partc (n : ℕ) (hn : 0 < n) (f : ℕ → ℤ) : ∃ S : finset ℕ, 
+  S ⊆ finset.range n ∧ S.nonempty ∧ (n : ℤ) ∣ ∑ i in S, f i :=
+begin
+  --  {ι : Type*} {s : finset ι} (f : ι → ℤ) (hs : s.nonempty) {n : ℕ} (hn : 0 < n)
+  -- (hs' : n < s.card): ∃ a b ∈ s, a ≠ b ∧ (n : ℤ) ∣ f a - f b := sorry
+  rcases partb' (λ t, ∑ i in finset.range t, f i) 
+    (@finset.nonempty_range_succ n) hn (by simp) with ⟨a, ha, b, hb, hab, hn⟩,
+  rw finset.mem_range_succ_iff at ha hb,
+  rw ne_iff_lt_or_gt at hab,
+  rcases hab with hab | (hab : b < a),
+  { use finset.Ico a b,
+    refine ⟨_, _, _⟩,
+    { rw finset.range_eq_Ico,
+      rw finset.Ico_subset_Ico_iff hab,
+      exact ⟨zero_le a, hb⟩, },
+    { rwa finset.nonempty_Ico, },
+    { rw finset.sum_Ico hab.le,
+      rw [← dvd_neg, neg_sub],
+      exact hn, },
+  },
+  { -- b < a case
     sorry
   },
 end
