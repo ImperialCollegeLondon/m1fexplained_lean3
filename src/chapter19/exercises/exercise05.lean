@@ -300,24 +300,15 @@ begin
     suffices : ∑ (i : ℤ) in A, i + ∑ (x : ℤ) in X, x = ∑ (j : ℤ) in B, j + ∑ (x : ℤ) in X, x,
     exact (add_left_inj (∑ (x : ℤ) in X, x)).mp this,
     convert h,
-    {
-      suffices : C = A ∪ X,
-      rw this,
-      rw ←  finset.sum_union,
-      exact finset.disjoint_sdiff_inter C D,
-      ext a,
-      rw [finset.mem_union],
-      split,
-      {
-        intro ha,
-        sorry
-      },
-      { intro ha,
-        cases ha with ha1 ha2,
-        exact hAC ha1,
-        exact finset.mem_of_mem_inter_left ha2, },
-    },
-    {
+    { 
+      suffices : C = A ∪ X, 
+      { rw this,
+        rw ←  finset.sum_union,
+        exact finset.disjoint_sdiff_inter C D, },
+      ext x,
+      simp only [finset.mem_union, finset.mem_sdiff, finset.mem_inter, ← and_or_distrib_left],
+      tauto, },
+    { 
       sorry
     },
   },
