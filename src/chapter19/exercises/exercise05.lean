@@ -156,8 +156,15 @@ begin
       rw [← dvd_neg, neg_sub],
       exact hn, },
   },
-  { -- b < a case -- just copy 10 lines above but change what needs to be changed
-    sorry
+  { -- b < a case
+    use finset.Ico b a,
+    refine ⟨_, _, _⟩,
+    { rw finset.range_eq_Ico,
+      rw finset.Ico_subset_Ico_iff hab,
+      exact ⟨zero_le b, ha⟩, },
+    { rwa finset.nonempty_Ico, },
+    { rw finset.sum_Ico hab.le,
+      exact hn, },
   },
 end
 
@@ -261,16 +268,12 @@ begin
   rw finset.one_lt_card at hy2,
   rcases hy2 with ⟨A, hA, B, hB, hAB⟩,
   rw finset.mem_filter at hA hB,
-  cases hB with hB1 hB2,
-  cases hA with hA1 hA2,
   use A,
   use B,
-  simp [hAB],
-  rw [finset.mem_powerset_len] at *,
-  simp [hA1, hB1],
-  rw ← hB2 at hA2,
-  simp [g] at hA2,
-  simp [hA2],
+  rw [finset.mem_powerset_len] at hA hB,
+  simp [hAB, hA.1, hB.1],
+  simp [g] at hA hB,
+  rw [hA.2, hB.2],
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
@@ -281,31 +284,68 @@ begin
   {
     -- let A = C - (C ∩ D), B = D - (C ∩ D),
     rcases h with ⟨C, D, hC, hD, hCD, h⟩,
-    let A := C \ D,
-    let B := D \ C,
+    let A : finset ℤ := C \ D,
+    let B : finset ℤ := D \ C,
     use A,
     use B,
-    -- rw finset.mem_sdiff, -- example of a theorem about sdiff
-    -- `mem` is `∈`
-    -- `sdiff` is `\` 
-
-    sorry,
+    have hAC : A ≤ C, apply finset.sdiff_subset,
+    have hBD : B ≤ D, apply finset.sdiff_subset,
+    have hA : A ≤ T := le_trans hAC hC,
+    have hB : B ≤ T := le_trans hBD hD,
+    split, exact hA,
+    split, exact hB,
+    have hAB : A ∩ B = ∅,
+    {
+      sorry
+    },
+    simp [hAB],
+    let X := C ∩ D,
+    suffices : ∑ (i : ℤ) in A, i + ∑ (x : ℤ) in X, x = ∑ (j : ℤ) in B, j + ∑ (x : ℤ) in X, x,
+    exact (add_left_inj (∑ (x : ℤ) in X, x)).mp this,
+    convert h,
+    {
+      sorry
+    },
+    {
+      sorry
+    },
   },
   {
     -- consider powerset of T
     let P := finset.powerset T,
-    let F := finset.Icc 0 414,
+    let F := finset.Icc (0:ℤ) 414,
     have hPF : F.card * 1 < P.card,
     {
       simp [nat.card_Icc, finset.card_powerset, hTcard],
-      linarith,
+      norm_num,
     },
     -- find a map from P to F by summing elements in P
     let g : finset ℤ → ℤ := λ x, ∑ i in x, i,
-    -- let g : P → F :=  λ x, ∑ i in (x : finset ℤ), i,
-    -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
-    -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
-    sorry
+    have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
+    {
+      intros p hp,
+      simp [g],
+      rw finset.mem_powerset at hp,
+      split,
+      {
+        sorry
+      },
+      {
+        sorry
+      },
+    },
+    have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hPF,
+    dsimp at this,
+    rcases this with ⟨y, hy1, hy2⟩,
+    rw finset.one_lt_card at hy2,
+    rcases hy2 with ⟨C, hC, D, hD, hCD⟩,
+    rw finset.mem_filter at hC hD,
+    use C,
+    use D,
+    rw [finset.mem_powerset] at hC hD,
+    simp [hCD, hC.1, hD.1],
+    simp [g] at hC hD,
+    rw [hC.2, hD.2],
   },
 end
 
@@ -330,4 +370,3 @@ begin
   -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
   sorry
 end
-
