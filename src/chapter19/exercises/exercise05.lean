@@ -126,25 +126,83 @@ end
 
 open_locale big_operators
 
-lemma partc (n : ℕ) (a : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, a i :=
+lemma partc (n : ℕ) (hn : 0 < n) (a : fin n → ℤ) : ∃ S : finset (fin n), S ≠ ∅ ∧ (n : ℤ) ∣ ∑ i in S, a i :=
 begin
+  let T : fin (n + 1) → ℤ := λ x, (∑ i : fin n, if x ≤ i then 0 else a i),
+  have p := partb' n hn T,
+  rcases p with ⟨a, b, hab⟩,
+
   sorry
 end
 
 lemma partd (S : finset ℤ) (hS : ∀ s ∈ S, (1 : ℤ) ≤ s ∧ s ≤ 50) (hScard : S.card = 10) : ∃ A B : finset ℤ,
   A.card = 5 ∧ B.card = 5 ∧ A ≠ B ∧ A ≤ S ∧ B ≤ S ∧ ∑ i in A, i = ∑ j in B, j :=
 begin
+  -- consider possibilities for subset of S with card 5
+  let P := finset.powerset_len 5 S,
+  -- consider possibilities for sum
+  let F := finset.Icc 15 240,
+  have hFP : F.card * 1 < P.card,
+  {
+    simp [nat.card_Icc, finset.card_powerset_len 5 S, hScard],
+    have h : (10 : ℕ).choose 5 = 252,
+    {refl},
+    simp [h],
+  },
+  -- find a function that maps P to F by taking sums of elements in the set
+  -- let g : P → F := λ x, ⟨∑ i in (x : finset ℤ), i, sorry⟩,
+  -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
+  -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
   sorry
 end
 
 lemma parte (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 50) (hTcard : T.card = 9) : ∃ A B : finset ℤ,
   A ≤ T ∧ B ≤ T ∧ A ∩ B = ∅ ∧ ∑ i in A, i = ∑ j in B, j :=
 begin
-  sorry
+  -- as long as we can find two non-empty sets A, B of the same sum, we can find two disjoint set by A/B and B/A
+  suffices h : ∃ C D : finset ℤ, C ≤ T ∧ D ≤ T ∧ C ≠ D ∧ ∑ i in C, i = ∑ j in D, j,
+  {
+    -- let A = C - (C ∩ D), B = D - (C ∩ D),
+    rcases h with ⟨C, D, hC, hD, hCD, h⟩,
+    
+    sorry,
+  },
+  {
+    -- consider powerset of T
+    let P := finset.powerset T,
+    let F := finset.Icc 0 414,
+    have hPF : F.card * 1 < P.card,
+    {
+      simp [nat.card_Icc, finset.card_powerset, hTcard],
+      linarith,
+    },
+    -- find a map from P to F by summing elements in P
+    -- let g : P → F :=  λ x, ∑ i in (x : finset ℤ), i,
+    -- have hg : ∀ p : finset ℤ, p ∈ P → (g p) ∈ F,
+    -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hg hFP,
+    sorry
+  },
 end
 
 lemma partf (T : finset ℤ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℤ,
   a ∈ T ∧ b ∈ T ∧ a ≠ b ∧ a ∣ b :=
 begin
+  -- claim : every t can be written as 2^k * q for which q is odd
+  have h : ∀ t : ℤ, t ∈ T → ∃ k q : ℕ, (q ≤ 199) ∧ ( ¬ 2 ∣ q) ∧ (t = 2^k * q),
+  {
+    intros t ht,
+    specialize hT t ht,
+    cases hT with h1 h2,
+    -- find the odd divisor of t
+    sorry,
+  },
+  -- there are 100 posibilities for q as every even number can be 'reduced'
+  -- let Q : finset ℤ :=  
+  -- have hTO : T.card * 1 < Q.card
+  -- find a map from Q to T, by considering corresponding 'q'
+  -- let f : Q → T := 
+  -- have hg : ∀ q ∈ Q, (f q) ∈ T,
+  -- have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
   sorry
 end
+
