@@ -373,7 +373,7 @@ begin
   let f : ℕ → ℕ := λ z, ord_compl[2] z,
   have hf : ∀ t ∈ T, (f t) ∈ Q,
   { intros t ht,
-    squeeze_simp [f],
+    simp only [f, finset.mem_filter, finset.mem_Icc, nat.odd_iff_not_even],
     sorry
   },
   have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
@@ -381,12 +381,7 @@ begin
   rcases this with ⟨y, hy1, hy2⟩,
   rw finset.one_lt_card at hy2,
   rcases hy2 with ⟨a, ha, b, hb, hab⟩,
-  use a,
-  use b,
   sorry
 end
-
-
-
 
 

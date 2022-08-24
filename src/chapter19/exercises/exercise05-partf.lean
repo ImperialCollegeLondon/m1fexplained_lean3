@@ -27,13 +27,15 @@ begin
       norm_num, },
     set p : ℕ := a / 2^k1,
     have hp : 0 < p,
-    { sorry },
+    { apply nat.div_pos,
+      apply nat.ord_proj_le,
+      exact ne_of_gt ha,
+      exact haf, },
     have hc'' :  2 ^ k2 * p < 2 ^ k1 * p,
-    { set n1 : ℕ := 2 ^ k1,
-      set n2 : ℕ := 2 ^ k2,
-      apply mul_lt_mul_of_pos_right hc' hp, },
+    { apply mul_lt_mul_of_pos_right hc' hp, },
     have ha' : a = 2 ^ k1 * p,
-    {sorry},
+    { 
+      sorry},
     have hb' : b = 2 ^ k2 * p,
     {sorry},
     rw ← ha' at hc'',
@@ -41,11 +43,15 @@ begin
     linarith, },
   have := nat.pow_div hab h02,
   rw ← this,
- 
-  -- rw div_mul_comm (2 ^ (b.factorization) 2) (2 ^ (a.factorization) 2) a,
-  -- rw h,
-  -- rw div_mul_cancel b (2 ^ (b.factorization) 2) (ne_of_gt hbf)
-  sorry,
+  set k1 : ℕ := a.factorization 2,
+  set k2 : ℕ := b.factorization 2,
+  have h0 : 2 ^ k2 / 2 ^ k1 * a = (a / 2^k1) * 2^k2,
+  { 
+    sorry},
+  rw h0,
+  rw h,
+  rw nat.div_mul_cancel,
+  exact nat.ord_proj_dvd b 2,
 end
 
 
