@@ -3,14 +3,64 @@ import combinatorics.pigeonhole
 import data.int.parity
 import data.nat.factorization.basic
 
+
+lemma nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a) (hab : a < b) :
+  a ∣ b :=
+begin
+  -- if a = 2^k1 * p, b = 2^k2 * p
+  rw dvd_iff_exists_eq_mul_left,
+  -- c = 2^ (k2 - k1)
+  use (2 ^ ((b.factorization 2)-(a.factorization 2))),
+  have h02 : 0 < 2 := by norm_num,
+  have haf : 0 < 2 ^ (a.factorization) 2, 
+  { exact pow_pos h02 ((nat.factorization a) 2), },
+  have hbf : 0 < 2 ^ (b.factorization) 2,
+  { exact pow_pos h02 ((nat.factorization b) 2), },
+  have hab : a.factorization 2 ≤ b.factorization 2,
+  { by_contra hc,
+    push_neg at hc,
+    set k1 : ℕ := a.factorization 2,
+    set k2 : ℕ := b.factorization 2,
+    have hc' : 2 ^ k2 < 2 ^ k1,
+    { rw pow_lt_pow_iff,
+      exact hc,
+      norm_num, },
+    set p : ℕ := a / 2^k1,
+    have hp : 0 < p,
+    { sorry },
+    have hc'' :  2 ^ k2 * p < 2 ^ k1 * p,
+    { set n1 : ℕ := 2 ^ k1,
+      set n2 : ℕ := 2 ^ k2,
+      apply mul_lt_mul_of_pos_right hc' hp, },
+    have ha' : a = 2 ^ k1 * p,
+    {sorry},
+    have hb' : b = 2 ^ k2 * p,
+    {sorry},
+    rw ← ha' at hc'',
+    rw ← hb' at hc'',
+    linarith, },
+  have := nat.pow_div hab h02,
+  rw ← this,
+ 
+  -- rw div_mul_comm (2 ^ (b.factorization) 2) (2 ^ (a.factorization) 2) a,
+  -- rw h,
+  -- rw div_mul_cancel b (2 ^ (b.factorization) 2) (ne_of_gt hbf)
+  sorry,
+end
+
+
+example (a : ℕ) (h : 0 < a) : 0 ≤ a :=
+begin
+  exact zero_le a
+end
+
 lemma partf (T : finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℕ,
   a ∈ T ∧ b ∈ T ∧ a ≠ b ∧ a ∣ b :=
 begin
   -- claim : every t can be written as 2^k * q for which q is odd, using ord_compl[2] t
   let Q : finset ℕ := (finset.Icc 1 200).filter odd,
   have hQcard : Q.card = 100,
-  {
-    -- Show that it equals (finset.Iio 100).map \<\la n, 2 * n + 1, proof_of_injectivity_here\> 
+  { -- Show that it equals (finset.Iio 100).map \<\la n, 2 * n + 1, proof_of_injectivity_here\> 
     have hQ : Q = (finset.Iio 100).map ⟨λ n, 2 * n + 1 , 
                                         begin intros a b hab, 
                                         simpa [add_left_inj, mul_eq_mul_left_iff, bit0_eq_zero, nat.one_ne_zero, or_false] using hab, 
@@ -28,16 +78,13 @@ begin
           linarith,
           norm_num, },
         { rcases hx with ⟨⟨h1, h2⟩, h3⟩,
-          have := nat.even_or_odd x,
-          cases this with hp hq,
-          finish,
-          unfold odd at hq,
-          cases hq with k hq,
-          rw hq,
+          rw ← nat.odd_iff_not_even at h3,
+          unfold odd at h3,
+          cases h3 with k h3,
+          rw h3,
           simp only [nat.add_succ_sub_one, add_zero, nat.mul_div_right, nat.succ_pos'], },
       },
-      {
-        intros x hx,
+      { intros x hx,
         simp only [finset.mem_map, finset.mem_Iio, function.embedding.coe_fn_mk, exists_prop, nat.one_le_cast, finset.mem_filter,
           finset.mem_Icc, nat.odd_iff_not_even] at hx ⊢,
         rcases hx with ⟨a, ⟨h1, h2⟩⟩,
@@ -65,24 +112,19 @@ begin
   have hf : ∀ t ∈ T, (f t) ∈ Q,
   { intros t ht,
     simp only [f, finset.mem_filter, finset.mem_Icc, nat.odd_iff_not_even],
+    have ht0 : t ≠ 0,
+    { specialize hT t ht, 
+    cases hT with hT1 hT2, 
+    linarith, }, 
     refine ⟨⟨_,_⟩,_⟩,
-    {
-      rw nat.one_le_div_iff,
-      { apply nat.ord_proj_le 2,
-        specialize hT t ht,
-        cases hT with hT1 hT2,
-        linarith, },
-      {exact nat.ord_proj_pos t 2, },
-    },
+    { rw nat.one_le_div_iff,
+      {apply nat.ord_proj_le 2 ht0, },
+      {exact nat.ord_proj_pos t 2, }, },
     { apply nat.div_le_of_le_mul,
       have h1 := nat.ord_proj_pos t 2,
       rw ← nat.succ_le_iff at h1,
       exact le_mul_of_one_le_of_le h1 (hT t ht).2, },
-    {
-      rw nat.not_even_iff,
-      by_contra,
-      sorry
-    },
+    { simp only [even_iff_two_dvd, nat.not_dvd_ord_compl nat.prime_two ht0, not_false_iff], },
   },
   have := finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to hf hTO,
   dsimp at this,
@@ -94,20 +136,32 @@ begin
     simp only [hab, ne.def, not_false_iff, true_and],
     rw finset.mem_filter at ha hb,
     simp only [ha.1, hb.1, true_and],
+    have ha0 : 0 < a,
+    { specialize hT a ha.1,
+      cases hT with h1 h2,
+      linarith, },
     suffices : f a = f b,
-    {
-      sorry
-    },
+    { apply nat.ord_compl_eq_dvd, 
+      exact this,
+      exact ha0,
+      exact h, },
     { rw [ha.2, hb.2], }, },
-  {
-    sorry
+  { have h : b < a,
+    { omega, },
+    refine ⟨b, a, _⟩,
+    simp only [ne.symm hab, ne.def, not_false_iff, true_and],
+    rw finset.mem_filter at ha hb,
+    simp only [ha.1, hb.1, true_and],
+    have hb0 : 0 < b,
+    { specialize hT b hb.1,
+      cases hT with h1 h2,
+      linarith, },
+    suffices : f b = f a,
+    { apply nat.ord_compl_eq_dvd, 
+      exact this,
+      exact hb0,
+      exact h, },
+    { rw [ha.2, hb.2], }, 
   },
 end
-
-lemma ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (hab : a < b) :
-  a ∣ b :=
-begin
-  sorry
-end
-
 
