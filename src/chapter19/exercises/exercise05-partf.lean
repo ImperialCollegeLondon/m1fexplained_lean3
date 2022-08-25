@@ -8,56 +8,52 @@ lemma nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (ha
   a ∣ b :=
 begin
   -- if a = 2^k1 * p, b = 2^k2 * p
+  set k1 : ℕ := a.factorization 2,
+  set k2 : ℕ := b.factorization 2,
   rw dvd_iff_exists_eq_mul_left,
   -- c = 2^ (k2 - k1)
-  use (2 ^ ((b.factorization 2)-(a.factorization 2))),
+  use (2 ^ (k2 - k1)),
   have h02 : 0 < 2 := by norm_num,
-  have haf : 0 < 2 ^ (a.factorization) 2, 
-  { exact pow_pos h02 ((nat.factorization a) 2), },
-  have hbf : 0 < 2 ^ (b.factorization) 2,
-  { exact pow_pos h02 ((nat.factorization b) 2), },
-  have hab : a.factorization 2 ≤ b.factorization 2,
+  -- because of natural division is involved, we need divisibility
+  have had := nat.ord_proj_dvd a 2,
+  have hbd := nat.ord_proj_dvd b 2,
+  have haf := pow_pos h02 k1,
+  have hbf := pow_pos h02 k2,
+  have hab : k1 ≤ k2,
   { by_contra hc,
     push_neg at hc,
-    set k1 : ℕ := a.factorization 2,
-    set k2 : ℕ := b.factorization 2,
     have hc' : 2 ^ k2 < 2 ^ k1,
     { rw pow_lt_pow_iff,
       exact hc,
       norm_num, },
-    set p : ℕ := a / 2^k1,
-    have hp : 0 < p,
+    have hak : 0 < a / 2 ^ k1,
     { apply nat.div_pos,
       apply nat.ord_proj_le,
       exact ne_of_gt ha,
       exact haf, },
-    have hc'' :  2 ^ k2 * p < 2 ^ k1 * p,
-    { apply mul_lt_mul_of_pos_right hc' hp, },
-    have ha' : a = 2 ^ k1 * p,
-    { 
-      sorry},
-    have hb' : b = 2 ^ k2 * p,
-    {sorry},
-    rw ← ha' at hc'',
-    rw ← hb' at hc'',
-    linarith, },
+    suffices : b < a,
+    { linarith, },
+    { have hc'' :  2 ^ k2 * (b / 2 ^ k2) < 2 ^ k1 * (a / 2 ^ k1),
+      { rw ← h, apply mul_lt_mul_of_pos_right hc' hak, },
+    rw mul_comm (2 ^ k2) (b / 2 ^ k2) at hc'',
+    rw nat.div_mul_cancel at hc'',
+    swap, exact hbd,
+    rw mul_comm (2 ^ k1) (a / 2 ^ k1) at hc'',
+    rw nat.div_mul_cancel at hc'',
+    swap, exact had,
+    exact hc'', }, },
   have := nat.pow_div hab h02,
   rw ← this,
-  set k1 : ℕ := a.factorization 2,
-  set k2 : ℕ := b.factorization 2,
-  have h0 : 2 ^ k2 / 2 ^ k1 * a = (a / 2^k1) * 2^k2,
-  { 
-    sorry},
-  rw h0,
+  -- again we need divisibility to proceed
+  have hkd := pow_dvd_pow 2 hab,
+  rw mul_comm,
+  rw ← nat.mul_div_assoc _ hkd,
+  rw mul_comm a (2^k2),
+  rw nat.mul_div_assoc,
+  swap, exact had,
   rw h,
-  rw nat.div_mul_cancel,
-  exact nat.ord_proj_dvd b 2,
-end
-
-
-example (a : ℕ) (h : 0 < a) : 0 ≤ a :=
-begin
-  exact zero_le a
+  rw mul_comm,
+  rw nat.div_mul_cancel hbd,
 end
 
 lemma partf (T : finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℕ,
