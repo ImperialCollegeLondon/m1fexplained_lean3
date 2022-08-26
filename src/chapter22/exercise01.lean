@@ -27,7 +27,6 @@ begin
   use 7,
   rw upper_bounds,
   intro t,
---  rintro (h | h | h | h),
   intro h,
   cases h,
   rw h,
