@@ -8,9 +8,9 @@ open_locale topological_space big_operators nnreal ennreal uniformity pointwise
 Which of the following sets S have an upper bound and which have a
 lower bound? In the cases where these exist, state what the least upper
 bounds and greatest lower bounds are.
-(i) S = {−1, 3, 7, −2}.
-(ii) S = {x | x ∈ ℝ and |x − 3| < |x + 7|}.
-(iii) S = {x | x ∈ ℝ and  x³ −3x < 0}.
+(i) S = {-1, 3, 7, -2}.
+(ii) S = {x | x ∈ ℝ and |x - 3| < |x + 7|}.
+(iii) S = {x | x ∈ ℝ and  x³ - 3x < 0}.
 (iv) S = {x | x ∈ ℝ and x² = a² + b² for some a, b ∈ ℕ}.
 -/
 
