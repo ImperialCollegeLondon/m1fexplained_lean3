@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2022 Kevin Buzzard. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Kevin Buzzard
+-/
 import data.real.basic
 import analysis.normed.field.unit_ball
 import data.real.sqrt
@@ -22,6 +27,7 @@ begin
   use 7,
   rw upper_bounds,
   intro t,
+--  rintro (h | h | h | h),
   intro h,
   cases h,
   rw h,
