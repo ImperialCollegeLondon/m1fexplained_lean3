@@ -7,31 +7,26 @@ def rational (x : ℝ) :=
 /-- The product of two rational numbers is always rational. -/
 lemma part_a : ∀ {a b : ℝ}, rational a → rational b → rational (a * b) :=
 begin
-  intros a b,
-  rintro ⟨x1,y1,h1⟩ ⟨x2,y2,h2⟩,
+  rintro a b ⟨x1,y1,rfl⟩ ⟨x2,y2,rfl⟩,
   use [x1*x2, y1*y2],
-  simp,
-  ring_nf,
-  rw [mul_inv, h1, h2],
-  ring_nf,
+  push_cast,
+  simp only [div_eq_mul_inv, mul_inv],
+  ring,
 end
 
 /-- The product of two irrational numbers is not always irrational. -/
 lemma part_b : ¬ ∀ {a b : ℝ}, irrational a → irrational b → irrational (a * b) :=
 begin
-  simp, 
-  use real.sqrt 2, 
+  push_neg,
+  use [real.sqrt 2, real.sqrt 2],
   split,
-  {exact irrational_sqrt_two,},
-  {use 1/(real.sqrt 2),
-  split,
-  {apply irrational.of_inv,
-  simp,
-  exact irrational_sqrt_two,},
-  {simp,
-  intro h,
-  apply irrational.ne_one,
-  {exact h,},{refl,},},},
+  { exact irrational_sqrt_two },
+  { split,
+    { simp [irrational_sqrt_two] },
+    { rw irrational_iff_ne_rational,
+      push_neg,
+      use [2, 1], 
+      norm_num } },
 end
 
 /-- The product of two irrational numbers is not always rational. -/
