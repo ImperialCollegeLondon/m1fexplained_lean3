@@ -1,3 +1,9 @@
+/-
+Copyright (c) 2022 Kevin Buzzard. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Kevin Buzzard, Natasha Johnson
+-/
+
 import tactic
 import data.real.irrational
 
@@ -18,15 +24,11 @@ end
 lemma part_b : ¬ ∀ {a b : ℝ}, irrational a → irrational b → irrational (a * b) :=
 begin
   push_neg,
-  use [real.sqrt 2, real.sqrt 2],
-  split,
-  { exact irrational_sqrt_two },
-  { split,
-    { simp [irrational_sqrt_two] },
-    { rw irrational_iff_ne_rational,
-      push_neg,
-      use [2, 1], 
-      norm_num } },
+  refine ⟨real.sqrt 2, real.sqrt 2, irrational_sqrt_two, irrational_sqrt_two, _⟩,
+  rw irrational_iff_ne_rational,
+  push_neg,
+  use [2, 1], 
+  norm_num,
 end
 
 /-- The product of two irrational numbers is not always rational. -/
