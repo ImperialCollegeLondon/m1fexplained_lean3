@@ -26,71 +26,17 @@ ders would be red. It turns out that this would never happen. -/
 
 lemma dvd_invar (li: ℕ × ℕ × ℕ) (t:colour) : 3 ∣ (2*li.2.1 + li.2.2 + (horrify li t).2.1 + 2*(horrify li t).2.2) :=
 begin
-  rcases li with ⟨a,b,c⟩,
+  rcases li with ⟨a, b,c⟩,
   dsimp,
-  cases t,
-  repeat {
-    cases a,
-    {
-      cases b,
-      rw horrify,
-      simp only [mul_zero, zero_add, add_zero],
-      cases c,
-      {
-        simp only [mul_zero, dvd_zero],
-      },
-      {
-        use c.succ,
-        ring,
-      },
-      cases c, 
-      {
-        rw horrify,
-        simp only [add_zero, mul_zero],
-        use b.succ,
-        ring_nf,
-      },
-      {
-        rw horrify,
-        use (b+c).succ,
-        rw ← nat.add_succ,
-        rw ← nat.add_one,
-        rw ← nat.add_one,
-        ring_nf,
-      },
-    },
-    {
-      cases b,
-      simp only [nat.nat_zero_eq_zero, mul_zero, zero_add],
-      cases c,
-      {
-        rw horrify,
-        simp only [mul_zero, dvd_zero],
-      },
-      {
-        rw horrify,
-        simp only [zero_add],
-        rw ← nat.add_one,
-        use (c+1),
-        ring_nf,
-      },
-      cases c, 
-      {
-        rw horrify,
-        simp only [add_zero, zero_add],
-        rw ← nat.add_one,
-        use (b+2),
-        ring_nf,
-      },
-      {
-        rw horrify,
-        rw ← nat.add_one,
-        rw ← nat.add_one,
-        use (b+c+1),
-        ring_nf,
-      }
-    },
-  },
+  cases t; cases a; cases b; cases c;
+  rw horrify;
+  simp only [mul_zero, zero_add, add_zero, dvd_zero, ←nat.add_one];
+  ring_nf;
+  try {use b+c+1, ring_nf};
+  try {use c+1, ring_nf};
+  try {use 0*a + b + 2, ring_nf};
+  use b + 1;
+  ring_nf,
 end
 
 lemma mod_invar (li: ℕ × ℕ × ℕ) (t:colour) : 2*(horrify li t).2.1 + (horrify li t).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
