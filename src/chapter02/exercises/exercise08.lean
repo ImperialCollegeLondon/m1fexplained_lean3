@@ -23,7 +23,116 @@ terrifying.
 In between being horrified and terrified, Ivor idly wonders whether it
 could ever happen that at some instant in the future, all of the salaman-
 ders would be red. It turns out that this would never happen. -/
+
+lemma dvd_invar (li: ℕ × ℕ × ℕ) (t:colour) : 3 ∣ (2*li.2.1 + li.2.2 + (horrify li t).2.1 + 2*(horrify li t).2.2) :=
+begin
+  rcases li with ⟨a,b,c⟩,
+  dsimp,
+  cases t,
+  repeat {
+    cases a,
+    {
+      cases b,
+      rw horrify,
+      simp only [mul_zero, zero_add, add_zero],
+      cases c,
+      {
+        simp only [mul_zero, dvd_zero],
+      },
+      {
+        use c.succ,
+        ring,
+      },
+      cases c, 
+      {
+        rw horrify,
+        simp only [add_zero, mul_zero],
+        use b.succ,
+        ring_nf,
+      },
+      {
+        rw horrify,
+        use (b+c).succ,
+        rw ← nat.add_succ,
+        rw ← nat.add_one,
+        rw ← nat.add_one,
+        ring_nf,
+      },
+    },
+    {
+      cases b,
+      simp only [nat.nat_zero_eq_zero, mul_zero, zero_add],
+      cases c,
+      {
+        rw horrify,
+        simp only [mul_zero, dvd_zero],
+      },
+      {
+        rw horrify,
+        simp only [zero_add],
+        rw ← nat.add_one,
+        use (c+1),
+        ring_nf,
+      },
+      cases c, 
+      {
+        rw horrify,
+        simp only [add_zero, zero_add],
+        rw ← nat.add_one,
+        use (b+2),
+        ring_nf,
+      },
+      {
+        rw horrify,
+        rw ← nat.add_one,
+        rw ← nat.add_one,
+        use (b+c+1),
+        ring_nf,
+      }
+    },
+  },
+end
+
+lemma mod_invar (li: ℕ × ℕ × ℕ) (t:colour) : 2*(horrify li t).2.1 + (horrify li t).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
+begin
+  have h := dvd_invar li t,
+  have h2 : (3:ℤ) ∣ 3 * ↑(2 * (horrify li t).snd.fst + (horrify li t).snd.snd),
+  {
+    use ↑(2 * (horrify li t).snd.fst + (horrify li t).snd.snd),
+  },
+  have h3: (3:ℤ) ∣ -(2 * li.snd.fst + li.snd.snd + (horrify li t).snd.fst + 2 * (horrify li t).snd.snd),
+  {
+    rw dvd_neg,
+    exact int.coe_nat_dvd.mpr h,
+  },
+  apply nat.modeq_iff_dvd.mpr,
+  simp only [int.coe_nat_bit1, nat.cast_one, nat.cast_add, nat.cast_mul, int.coe_nat_bit0],
+  apply (dvd_add_right h2).mp,
+  simp only [nat.cast_add, nat.cast_mul, int.coe_nat_bit0, nat.cast_one],
+  ring_nf,
+  apply (dvd_add_right h3).mp,
+  simp only [neg_add_rev],
+  ring_nf,
+  use ↑((horrify li t).snd.fst),
+end
+
+
+lemma list_invar (l : list colour) (li: ℕ × ℕ × ℕ) : 2*(list.foldl horrify li l).2.1 + (list.foldl horrify li l).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
+begin
+  induction l using list.reverse_rec_on with x hx hm,
+  simp only [list.foldl_nil],
+  simp only [list.foldl_append, list.foldl_cons, list.foldl_nil],
+  have h := mod_invar (list.foldl horrify li x) hx,
+  unfold nat.modeq at *,
+  rw hm at h,
+  exact h,
+end
+
 lemma salamander : ¬ ∃ (l : list colour), list.foldl horrify (15, 7, 8) l = (30, 0, 0) :=
 begin
-  sorry
+  rintros ⟨l, hl⟩,
+  have t := list_invar l (15, 7, 8),
+  rw hl at t,
+  simp only [mul_zero, add_zero] at t,
+  norm_num at t,
 end
