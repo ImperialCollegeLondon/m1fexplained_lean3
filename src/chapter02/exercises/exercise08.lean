@@ -24,44 +24,19 @@ In between being horrified and terrified, Ivor idly wonders whether it
 could ever happen that at some instant in the future, all of the salaman-
 ders would be red. It turns out that this would never happen. -/
 
-lemma dvd_invar (li: ℕ × ℕ × ℕ) (t:colour) : 3 ∣ (2*li.2.1 + li.2.2 + (horrify li t).2.1 + 2*(horrify li t).2.2) :=
+lemma mod_invar (li: ℕ × ℕ × ℕ) (t:colour) : 2*(horrify li t).2.1 + (horrify li t).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
 begin
+  have h : 4 = 1 + 3, refl,
   rcases li with ⟨a, b,c⟩,
   dsimp,
   cases t; cases a; cases b; cases c;
   rw horrify;
   simp only [mul_zero, zero_add, add_zero, dvd_zero, ←nat.add_one];
   ring_nf;
-  try {use b+c+1, ring_nf};
-  try {use c+1, ring_nf};
-  try {use 0*a + b + 2, ring_nf};
-  use b + 1;
-  ring_nf,
+  unfold nat.modeq;
+  try {repeat {rw [h, ← add_assoc, nat.add_mod_right]}};
+  rw [← add_assoc, nat.add_mod_right],
 end
-
-lemma mod_invar (li: ℕ × ℕ × ℕ) (t:colour) : 2*(horrify li t).2.1 + (horrify li t).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
-begin
-  have h := dvd_invar li t,
-  have h2 : (3:ℤ) ∣ 3 * ↑(2 * (horrify li t).snd.fst + (horrify li t).snd.snd),
-  {
-    use ↑(2 * (horrify li t).snd.fst + (horrify li t).snd.snd),
-  },
-  have h3: (3:ℤ) ∣ -(2 * li.snd.fst + li.snd.snd + (horrify li t).snd.fst + 2 * (horrify li t).snd.snd),
-  {
-    rw dvd_neg,
-    exact int.coe_nat_dvd.mpr h,
-  },
-  apply nat.modeq_iff_dvd.mpr,
-  simp only [int.coe_nat_bit1, nat.cast_one, nat.cast_add, nat.cast_mul, int.coe_nat_bit0],
-  apply (dvd_add_right h2).mp,
-  simp only [nat.cast_add, nat.cast_mul, int.coe_nat_bit0, nat.cast_one],
-  ring_nf,
-  apply (dvd_add_right h3).mp,
-  simp only [neg_add_rev],
-  ring_nf,
-  use ↑((horrify li t).snd.fst),
-end
-
 
 lemma list_invar (l : list colour) (li: ℕ × ℕ × ℕ) : 2*(list.foldl horrify li l).2.1 + (list.foldl horrify li l).2.2 ≡  2*li.2.1 + li.2.2 [MOD 3] :=
 begin
@@ -70,8 +45,7 @@ begin
   simp only [list.foldl_append, list.foldl_cons, list.foldl_nil],
   have h := mod_invar (list.foldl horrify li x) hx,
   unfold nat.modeq at *,
-  rw hm at h,
-  exact h,
+  rwa hm at h,
 end
 
 lemma salamander : ¬ ∃ (l : list colour), list.foldl horrify (15, 7, 8) l = (30, 0, 0) :=
