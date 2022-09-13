@@ -32,18 +32,10 @@ end
 
 lemma part_b (n : ℤ) : even (n^2) → even n :=
 begin
-
-  
+  sorry,
 end
 
 lemma part_c (n : ℤ) (h : ∃ m : ℤ, n = m^3 - m) : 6 ∣ n :=
 begin
   sorry
-end
-
-lemma test (a: real) (b:real) (h:a>=0) : a^2 >= b^2 -> a >= b :=
-begin
-  intro h,
-  library_search,
-  sorry,
 end
