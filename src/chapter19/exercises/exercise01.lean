@@ -217,7 +217,7 @@ begin
   { intro h, 
     replace h := nat.prime.dvd_of_dvd_pow nat.prime_seven h,
     norm_num at h, },
-    { intro h, 
+  { intro h, 
     replace h := nat.prime.dvd_of_dvd_pow nat.prime_seven h,
     norm_num at h, },
   all_goals {exact pow_ne_zero _ (by norm_num)},
