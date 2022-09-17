@@ -2,6 +2,7 @@ import data.real.sqrt
 import data.int.sqrt
 import tactic
 import data.int.parity -- even and odd
+import data.zmod.basic
 
 lemma part_a : real.sqrt 6 - real.sqrt 2 > 1 :=
 begin
@@ -30,12 +31,49 @@ begin
   norm_num,
 end
 
-lemma part_b (n : ℤ) : even (n^2) → even n :=
+
+lemma part_b_n (n : ℕ) : even (n^2) → even n :=
 begin
-  sorry,
+  contrapose,
+  repeat {rw nat.not_even_iff},
+  intro h,
+  rw sq,
+  exact nat.odd_mul_odd h h,
 end
 
 lemma part_c (n : ℤ) (h : ∃ m : ℤ, n = m^3 - m) : 6 ∣ n :=
 begin
-  sorry
+  rcases h with ⟨m, rfl⟩,
+  have p: m^3 - m = (m+1)*(m-1)*m,
+  ring_nf,
+  rw p, 
+  have q: (6:ℤ) = 2 * 3, refl,
+  rw q,
+  rw ← int.modeq_zero_iff_dvd,
+  have r: nat.coprime 2 3, norm_num,
+  rw ← int.modeq_and_modeq_iff_modeq_mul,
+  {
+    split,
+    {
+      have := zmod.int_coe_eq_int_coe_iff ((m + 1) * (m - 1) * m) 0 2,
+      norm_cast at this,
+      rw ← this,
+      simp only [int.cast_mul, int.cast_add, int.cast_one, int.cast_sub, mul_eq_zero],
+      generalize : (↑m : zmod 2) = m2,
+      revert m2,
+      dec_trivial,
+    },
+    {
+      have := zmod.int_coe_eq_int_coe_iff ((m + 1) * (m - 1) * m) 0 3,
+      norm_cast at this,
+      rw ← this,
+      simp only [int.cast_mul, int.cast_add, int.cast_one, int.cast_sub, mul_eq_zero],
+      generalize : (↑m : zmod 3) = m3,
+      revert m3,
+      dec_trivial,
+    },
+  },
+  {
+    norm_num,
+  },
 end

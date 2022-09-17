@@ -34,7 +34,7 @@ begin
   simp only [mul_zero, zero_add, add_zero, dvd_zero, ←nat.add_one];
   ring_nf;
   unfold nat.modeq;
-  try {repeat {rw [h, ← add_assoc, nat.add_mod_right]}};
+  repeat {rw [h, ← add_assoc, nat.add_mod_right]};
   rw [← add_assoc, nat.add_mod_right],
 end
 
