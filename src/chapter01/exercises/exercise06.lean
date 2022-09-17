@@ -14,8 +14,7 @@ begin
   {
     exact lt_of_pow_lt_pow 2 a this,
   },
-  rw real.sq_sqrt,
-  rw add_sq 1 (real.sqrt 2),
+  rw [real.sq_sqrt, add_sq 1 (real.sqrt 2)],
   simp only [one_pow, mul_one, real.sq_sqrt, zero_le_bit0, zero_le_one, gt_iff_lt],
   suffices: 2*(real.sqrt 2) < 3, by linarith,
   suffices: (2*(real.sqrt 2))^2 < 3^2, 
@@ -24,13 +23,14 @@ begin
     norm_num,
     exact this,
   },
-  simp only [mul_pow],
-  rw real.sq_sqrt,
-  norm_num,
-  simp only [zero_le_bit0, zero_le_one],
+  {
+    rw [mul_pow, real.sq_sqrt],
+    norm_num,
+    rw zero_le_bit0,
+    exact zero_le_one
+  },
   norm_num,
 end
-
 
 lemma part_b_n (n : ℕ) : even (n^2) → even n :=
 begin
@@ -44,36 +44,12 @@ end
 lemma part_c (n : ℤ) (h : ∃ m : ℤ, n = m^3 - m) : 6 ∣ n :=
 begin
   rcases h with ⟨m, rfl⟩,
-  have p: m^3 - m = (m+1)*(m-1)*m,
-  ring_nf,
-  rw p, 
-  have q: (6:ℤ) = 2 * 3, refl,
-  rw q,
   rw ← int.modeq_zero_iff_dvd,
-  have r: nat.coprime 2 3, norm_num,
-  rw ← int.modeq_and_modeq_iff_modeq_mul,
-  {
-    split,
-    {
-      have := zmod.int_coe_eq_int_coe_iff ((m + 1) * (m - 1) * m) 0 2,
-      norm_cast at this,
-      rw ← this,
-      simp only [int.cast_mul, int.cast_add, int.cast_one, int.cast_sub, mul_eq_zero],
-      generalize : (↑m : zmod 2) = m2,
-      revert m2,
-      dec_trivial,
-    },
-    {
-      have := zmod.int_coe_eq_int_coe_iff ((m + 1) * (m - 1) * m) 0 3,
-      norm_cast at this,
-      rw ← this,
-      simp only [int.cast_mul, int.cast_add, int.cast_one, int.cast_sub, mul_eq_zero],
-      generalize : (↑m : zmod 3) = m3,
-      revert m3,
-      dec_trivial,
-    },
-  },
-  {
-    norm_num,
-  },
+  have := zmod.int_coe_eq_int_coe_iff (m^3 - m) 0 6,
+  norm_cast at this,
+  rw ← this,
+  rw [int.cast_sub, int.cast_pow],
+  generalize : (↑m : zmod 6) = m6,
+  revert m6,
+  dec_trivial,
 end
