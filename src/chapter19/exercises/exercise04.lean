@@ -45,11 +45,7 @@ begin
     cases z,
     use X.a,
     refl },
-  specialize h hgf,
-  specialize h Y.c,
-  cases h with x h,
-  cases x,
-  cases h,
+  obtain ⟨⟨⟩, ⟨⟩⟩ := h hgf Y.c,
 end
 
 lemma partb : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective g :=
