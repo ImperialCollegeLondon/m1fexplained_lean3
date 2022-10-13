@@ -45,28 +45,19 @@ begin
     cases z,
     use X.a,
     refl },
-  specialize h hgf,
-  specialize h Y.c,
-  cases h with x h,
-  cases x,
-  cases h,
+  obtain ⟨⟨⟩, ⟨⟩⟩ := h hgf Y.c,
 end
 
 lemma partb : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective g :=
 begin
-  intros X Y Z f g hgf,
-  intro b,
-  specialize hgf b,
-  cases hgf with a hgf,
-  use f a,
-  exact hgf,
+  intros X Y Z f g hgf b,
+  obtain ⟨a, hgf⟩ := hgf b,
+  exact ⟨f a, hgf⟩,
 end
 
 lemma gf_injective : injective (g ∘ f) :=
 begin
-  intros a b h,
-  cases a,
-  cases b,
+  rintros ⟨⟩ ⟨⟩ _,
   refl,
 end
 
@@ -74,9 +65,8 @@ lemma partc : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f
 begin
   intros X Y Z f g hgf a b hf,
   have hg : g (f a) = g (f b),
-  {rw hf},
-  specialize hgf hg,
-  exact hgf,
+  { rw hf },
+  exact hgf hg,
 end
 
 lemma partd : ¬ (∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective g) :=
@@ -85,8 +75,7 @@ begin
   specialize h X Y Z f g,
   specialize h gf_injective,
   have hy : g Y.b = g Y.c,
-  {unfold g},
+  { unfold g },
   specialize h hy,
-  simp at h,
-  exact h,
+  simpa using h,
 end
