@@ -65,7 +65,7 @@ lemma partc : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f
 begin
   intros X Y Z f g hgf a b hf,
   have hg : g (f a) = g (f b),
-  {rw hf},
+  { rw hf },
   specialize hgf hg,
   exact hgf,
 end
