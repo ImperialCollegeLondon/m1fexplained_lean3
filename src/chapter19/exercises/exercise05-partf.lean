@@ -67,7 +67,6 @@ begin
           norm_num, },
         { rcases hx with ⟨⟨h1, h2⟩, h3⟩,
           rw ← nat.odd_iff_not_even at h3,
-          unfold odd at h3,
           cases h3 with k h3,
           rw h3,
           simp only [nat.add_succ_sub_one, add_zero, nat.mul_div_right, nat.succ_pos'], },
