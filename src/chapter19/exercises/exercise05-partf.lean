@@ -34,9 +34,7 @@ begin
     rw nat.div_mul_cancel at hc'',
     swap, exact hbd,
     rw mul_comm (2 ^ k1) (a / 2 ^ k1) at hc'',
-    rw nat.div_mul_cancel at hc'',
-    swap, exact had,
-    exact hc'', }, },
+    rwa nat.div_mul_cancel had at hc'', },
   rw ← nat.pow_div hab h02,
   -- again we need divisibility to proceed
   have hkd := pow_dvd_pow 2 hab,
