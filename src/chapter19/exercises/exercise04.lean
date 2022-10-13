@@ -78,6 +78,5 @@ begin
   have hy : g Y.b = g Y.c,
   {unfold g},
   specialize h hy,
-  simp at h,
-  exact h,
+  simpa using h,
 end
