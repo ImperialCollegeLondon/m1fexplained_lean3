@@ -40,14 +40,8 @@ begin
   rw ← nat.pow_div hab h02,
   -- again we need divisibility to proceed
   have hkd := pow_dvd_pow 2 hab,
-  rw mul_comm,
-  rw ← nat.mul_div_assoc _ hkd,
-  rw mul_comm a (2^k2),
-  rw nat.mul_div_assoc,
-  swap, exact had,
-  rw h,
-  rw mul_comm,
-  rw nat.div_mul_cancel hbd,
+  rw [mul_comm, ← nat.mul_div_assoc _ hkd, mul_comm a (2^k2), nat.mul_div_assoc _ had,
+    h, mul_comm, nat.div_mul_cancel hbd],
 end
 
 lemma partf (T : finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℕ,
