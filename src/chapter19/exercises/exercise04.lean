@@ -66,8 +66,7 @@ begin
   intros X Y Z f g hgf a b hf,
   have hg : g (f a) = g (f b),
   { rw hf },
-  specialize hgf hg,
-  exact hgf,
+  exact hgf hg,
 end
 
 lemma partd : ¬ (∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective g) :=
