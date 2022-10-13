@@ -57,9 +57,7 @@ end
 
 lemma gf_injective : injective (g ∘ f) :=
 begin
-  intros a b h,
-  cases a,
-  cases b,
+  rintros ⟨⟩ ⟨⟩ _,
   refl,
 end
 
