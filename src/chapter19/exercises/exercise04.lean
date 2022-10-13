@@ -76,7 +76,7 @@ begin
   specialize h X Y Z f g,
   specialize h gf_injective,
   have hy : g Y.b = g Y.c,
-  {unfold g},
+  { unfold g },
   specialize h hy,
   simpa using h,
 end
