@@ -50,12 +50,9 @@ end
 
 lemma partb : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), surjective (g ∘ f) → surjective g :=
 begin
-  intros X Y Z f g hgf,
-  intro b,
-  specialize hgf b,
-  cases hgf with a hgf,
-  use f a,
-  exact hgf,
+  intros X Y Z f g hgf b,
+  obtain ⟨a, hgf⟩ := hgf b,
+  exact ⟨f a, hgf⟩,
 end
 
 lemma gf_injective : injective (g ∘ f) :=
