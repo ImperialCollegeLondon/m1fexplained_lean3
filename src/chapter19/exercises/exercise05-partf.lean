@@ -4,7 +4,7 @@ import data.int.parity
 import data.nat.factorization.basic
 
 
-lemma nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a) (hab : a < b) :
+lemma nat.ord_compl_eq_dvd {a b : ℕ} (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a) (hab : a < b) :
   a ∣ b :=
 begin
   -- if a = 2^k1 * p, b = 2^k2 * p
