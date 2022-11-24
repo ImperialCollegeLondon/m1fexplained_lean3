@@ -22,10 +22,8 @@ lemma parta' (S T : Type) [fintype S] [fintype T] (hS : fintype.card S = 3) (hT 
   fintype.card {f : S → T // function.injective f} = 60 :=
 begin
   have h : fintype.card {f : S → T // function.injective f} = fintype.card (S ↪ T),
-  {
-    apply fintype.card_congr,
-    exact equiv.subtype_injective_equiv_embedding S T,
-  },
+  { apply fintype.card_congr,
+    exact equiv.subtype_injective_equiv_embedding S T, },
   rw h,
   simpa [fintype.card_embedding_eq, hS, hT],
 end
@@ -36,24 +34,18 @@ lemma partb (S T : Type) [fintype S] [fintype T] (m n : ℕ) (hmn : m ≤ n) (hS
   fintype.card {f : S → T // function.injective f} = ∏ i in finset.Icc (n - m + 1) n, i :=
 begin
   have h : fintype.card {f : S → T // function.injective f} = fintype.card (S ↪ T),
-  {
-    apply fintype.card_congr,
-    exact equiv.subtype_injective_equiv_embedding S T,
-  },
+  { apply fintype.card_congr,
+    exact equiv.subtype_injective_equiv_embedding S T, },
   rw h,
   simp [fintype.card_embedding_eq, hS, hT],
   clear hS hT h _inst_1 _inst_2,
   induction m,
   simp,
-  have hm : m_n ≤ n,
-  {
-    exact nat.le_of_succ_le hmn,
-  },
+  have hm : m_n ≤ n := nat.le_of_succ_le hmn, 
   specialize m_ih hm,
   simp [nat.desc_factorial_succ, m_ih, nat.succ_eq_add_one],
   have p : insert (n - m_n) (finset.Icc (n - m_n + 1) n) = finset.Icc (n - (m_n + 1) + 1) n,
-  {
-    ext c,
+  { ext c,
     split,
     { intro hc,
       simp at *,
@@ -62,7 +54,7 @@ begin
         simp,
         linarith, },
       { simp [hc2],
-        linarith [hc2.1], }},
+        linarith [hc2.1], }, },
     { intro hc,
       simp at *,
       simp [hc],
@@ -72,8 +64,7 @@ begin
         exact h, },
       { push_neg at h,
         left,
-        linarith, }},
-  },
+        linarith, }, }, },
   rw ← p,
   simp,
 end 
