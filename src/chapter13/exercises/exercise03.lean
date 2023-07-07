@@ -20,8 +20,6 @@ begin
   norm_num,
 end
 
-lemma mul_mod_mul_left (t x y : ℤ) : (t * x) % (t * y) = t * (x % y) := sorry
-
 lemma part_b : ¬∃x : ℤ, 91 * x ≡ 84 [ZMOD 143] :=
 begin
   unfold int.modeq,
@@ -32,11 +30,9 @@ begin
   { convert h1 using 2,
     ring, },
   { rw int.mul_mod_mul_of_pos at h2,
-    { have : (13 : ℤ) ∣ 84, 
-      {use 7 * h % 11,
-       exact h2.symm, },
-      {norm_num at this, },},
-    { norm_num, },},
+    { have : (13 : ℤ) ∣ 84 := ⟨7 * h % 11, h2.symm⟩, 
+      norm_num at this, },
+    { norm_num, } },
 end
 
 lemma part_c : ¬∃x : ℤ, x^2 ≡ 2 [ZMOD 5] :=
