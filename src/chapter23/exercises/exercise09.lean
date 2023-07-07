@@ -1,7 +1,7 @@
 import topology.instances.real 
 
 open filter real
-open_locale topological_space 
+open_locale topology
 
 variable a : ℕ → ℝ 
 
