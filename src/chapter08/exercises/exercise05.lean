@@ -4,7 +4,7 @@ import data.real.basic -- for part d
 lemma part_a (n : ℕ) : (11 : ℤ) ∣ 5^(2*n) - 3^n :=
 begin
   induction n with x hx,
-  norm_num,
+  { norm_num, },
   rw [nat.succ_eq_add_one, mul_add,pow_add,mul_one],
   nth_rewrite 1 pow_succ,
   cases hx with m hm,
@@ -16,12 +16,7 @@ begin
     rw mul_sub _,
   },
   use (2:ℤ) * (5:ℤ) ^ (2 * x) + (3:ℤ)*m,
-  ring_nf,
-  have t : (33:ℤ)*m = (3:ℤ)*((11:ℤ)*m),
-  ring_nf,
-  rw t,
-  rw ← hm,
-  ring_nf,
+  linear_combination 3 * hm,
 end
 
 
@@ -39,7 +34,7 @@ end
 lemma part_c (n : ℕ) : 9 ∣ n^3 + (n+1)^3 + (n+2)^3 :=
 begin
   induction n with x hx,
-  norm_num,
+  { norm_num, },
   repeat {rw [← nat.add_one]},
   have h: 9 ∣ 27 + 27*x + 9 * x^2,
   {
@@ -47,15 +42,15 @@ begin
     ring_nf,
   },
   have p := nat.dvd_add h hx,
-  ring_nf at *,
-  exact p,
+  convert p using 1,
+  ring,
 end
 
 -- also works for n=0
 lemma part_d (n : ℕ) (x : ℝ) (hx : 2 ≤ x) : (n : ℝ) * x ≤ x^n :=
 begin
   induction n with h hh,
-  norm_num,
+  { norm_num, },
   by_cases hn : h = 0, 
   {
     rw hn,
@@ -92,9 +87,9 @@ begin
   induction n with h hx,
   norm_num at hn,
   repeat {rw [pow_succ]},
-  have p : 2 * 2 ^ h < 5* 2 ^ h, by simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', nat.bit0_lt_bit1_iff, nat.one_le_bit0_iff],
-  have q : 3 * 3 ^ h < 5* 3 ^ h, by simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', bit1_lt_bit1, nat.one_lt_bit0_iff],
-  have r : 4 * 4 ^ h < 5* 4 ^ h, by  simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', nat.bit0_lt_bit1_iff],
+  have p : 2 * 2 ^ h < 5 * 2 ^ h, by simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', nat.bit0_lt_bit1_iff, nat.one_le_bit0_iff],
+  have q : 3 * 3 ^ h < 5 * 3 ^ h, by simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', bit1_lt_bit1, nat.one_lt_bit0_iff],
+  have r : 4 * 4 ^ h < 5 * 4 ^ h, by  simp only [mul_lt_mul_right, pow_pos, nat.succ_pos', nat.bit0_lt_bit1_iff],
   have t : 5*4^h + 5*3^h + 5*2^h = 5*(4^h+3^h+2^h), by ring_nf,
   have s := add_lt_add (add_lt_add r q) p,
   rw t at s,
