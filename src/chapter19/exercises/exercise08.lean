@@ -13,7 +13,6 @@ into this equation and see what happens.)
 
 import tactic
 import data.polynomial.eval
-import data.polynomial
 import data.mv_polynomial.comm_ring
 
 open_locale polynomial -- notation for polynomials
