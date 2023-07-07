@@ -8,7 +8,7 @@ theorem part_i :
   tendsto (λ n : ℕ, n / (n + 5) : ℕ → ℝ) at_top (𝓝 1) :=
 begin 
   rw tendsto,
-  
+  sorry,
 end 
 
 theorem part_ii :
