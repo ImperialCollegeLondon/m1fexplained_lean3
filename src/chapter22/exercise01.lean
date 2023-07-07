@@ -44,8 +44,7 @@ end
 -- 7 is the least upper bound.
 lemma part_a_lub : is_lub Si 7 :=
 begin
-  rw is_lub,
-  rw is_least,
+  rw [is_lub, is_least],
   split,
   rw upper_bounds,
   intro t,
