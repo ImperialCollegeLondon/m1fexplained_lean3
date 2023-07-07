@@ -1,5 +1,7 @@
 import tactic
 
+namespace chapter01.exercise05
+
 -- True or false? n = 3 ↔ n^2-2n-3=0. If you think it's false
 -- then you'll have to modify the statement by putting it in brackets
 -- and adding a ¬ in front of it. 
@@ -46,3 +48,5 @@ begin
 end
 
 
+
+end chapter01.exercise05

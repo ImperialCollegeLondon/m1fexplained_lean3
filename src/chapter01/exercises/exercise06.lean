@@ -4,6 +4,8 @@ import tactic
 import data.int.parity -- even and odd
 import data.zmod.basic
 
+namespace chapter01.exercise06
+
 lemma part_a : real.sqrt 6 - real.sqrt 2 > 1 :=
 begin
   have a:= real.sqrt_nonneg (6:real),
@@ -52,3 +54,5 @@ begin
   revert m6,
   dec_trivial,
 end
+
+end chapter01.exercise06

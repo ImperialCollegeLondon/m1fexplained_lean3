@@ -1,5 +1,7 @@
 import tactic
 
+namespace chapter01.exercise07
+
 /-
 7. Disprove the following statements:
 (a) If n and k are positive integers, then n^k − n is always divisible by k.
@@ -36,3 +38,5 @@ begin
   cases h,
 end
 
+
+end chapter01.exercise07

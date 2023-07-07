@@ -1,5 +1,7 @@
 import data.int.modeq
 
+namespace chapter13.exercise07
+
 /-
 Show that every square is congruent to 0, 1, or -1 modulo 5, and is congruent to 0, 1, or 4 modulo 8.
 
@@ -27,3 +29,5 @@ lemma exist_sq : ∃n : ℤ, n > 0 ∧ (∃k : ℤ, k^2 = 2 * n + 1) ∧ (∃l :
 begin
   sorry
 end
+
+end chapter13.exercise07

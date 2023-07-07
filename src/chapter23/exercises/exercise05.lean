@@ -1,5 +1,7 @@
 import topology.instances.real 
 
+namespace chapter23.exercise05
+
 open filter real
 open_locale topology
 
@@ -8,3 +10,5 @@ theorem problem_5 (a : ℝ) (f : ℕ → ℝ) :
 begin 
   sorry 
 end 
+
+end chapter23.exercise05

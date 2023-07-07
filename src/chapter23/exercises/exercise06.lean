@@ -1,5 +1,7 @@
 import topology.instances.real 
 
+namespace chapter23.exercise06
+
 open filter real
 open_locale topology
 
@@ -9,3 +11,5 @@ theorem problem_6 (f : ℕ → ℝ) (hf : ∀ n, f (n + 1) ≤ f n)
 begin 
   sorry 
 end 
+
+end chapter23.exercise06

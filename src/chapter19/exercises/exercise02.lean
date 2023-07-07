@@ -1,5 +1,8 @@
 import data.real.basic
 import tactic
+
+namespace chapter19.exercise02
+
 /-
 Q2. The functions f , g : ℝ → ℝ are defined as follows:
 f(x) = 2x if 0 ≤ x ≤ 1, and f (x) = 1 otherwise;
@@ -44,3 +47,5 @@ begin
   try {cases h_1};
   try {nlinarith},
 end
+
+end chapter19.exercise02

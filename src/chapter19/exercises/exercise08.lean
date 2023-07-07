@@ -15,6 +15,9 @@ import tactic
 import data.polynomial.eval
 import data.mv_polynomial.comm_ring
 
+namespace chapter19.exercise08
+
+
 open_locale polynomial -- notation for polynomials
 
 open polynomial
@@ -260,3 +263,4 @@ begin
   omega,
 end
 
+end chapter19.exercise08

@@ -1,6 +1,8 @@
 import tactic.interval_cases
 import data.real.basic
 
+namespace chapter01.exercise02
+
 -- Let B,C,D,E be the following sets
 def B : set ℝ := {x | x^2 < 4}
 def C : set ℝ := {x | 0 ≤ x ∧ x < 2}
@@ -91,3 +93,5 @@ begin
     exact h1, },
   contradiction,
 end
+
+end chapter01.exercise02

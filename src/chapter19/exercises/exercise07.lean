@@ -7,6 +7,8 @@ tions from S to T is equal to n(n − 1)(n − 2) · · ·(n − m + 1).
 import tactic
 import data.fintype.card_embedding
 
+namespace chapter19.exercise07
+
 open_locale classical
 
 -- replace 37 with the right number
@@ -68,3 +70,5 @@ begin
   rw ← p,
   simp,
 end 
+
+end chapter19.exercise07

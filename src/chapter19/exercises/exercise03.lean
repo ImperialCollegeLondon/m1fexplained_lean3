@@ -1,6 +1,8 @@
 import tactic
 import data.real.basic
 
+namespace chapter19.exercise03
+
 /-
 Two functions f, g : ℝ → ℝ are such that for all x ∈ ℝ,
 g(x) = x² + x + 3, and (g ∘ f)(x) = x² − 3x + 5.
@@ -22,4 +24,5 @@ begin
   simp [sub_eq_zero],
 end
 
+end chapter19.exercise03
 

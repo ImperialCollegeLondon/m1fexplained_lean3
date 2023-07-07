@@ -1,5 +1,7 @@
 import topology.instances.real 
 
+namespace chapter23.exercise03
+
 open filter real
 open_locale topology
 
@@ -8,3 +10,5 @@ theorem leibeck_23_3 (S : set ℝ) (c : ℝ) (hc : is_lub S c) :
 begin 
   sorry 
 end 
+
+end chapter23.exercise03

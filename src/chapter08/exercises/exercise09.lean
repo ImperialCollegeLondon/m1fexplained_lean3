@@ -1,6 +1,7 @@
 import tactic
 import data.real.basic -- for part d
 
+namespace chapter08.exercise09
 
 lemma exercise (n : ℕ) (q : ℝ) (hgq : 0 < q) (hlq : q < (1/2 : ℝ)) : (1 + q)^n ≤ 1 + (2:ℝ)^n * q :=
 begin
@@ -61,6 +62,5 @@ begin
   refl,
 end
 
-
-
+end chapter08.exercise09
 

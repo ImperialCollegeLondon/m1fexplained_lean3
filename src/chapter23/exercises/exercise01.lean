@@ -1,6 +1,8 @@
 import data.real.sqrt
 import data.complex.exponential
 
+namespace chapter23.exercise01
+
 open filter real
 open_locale topology
 
@@ -46,3 +48,5 @@ theorem part_vii :
 begin 
   sorry
 end 
+
+end chapter23.exercise01

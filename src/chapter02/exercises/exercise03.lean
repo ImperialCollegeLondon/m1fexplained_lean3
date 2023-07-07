@@ -7,6 +7,9 @@ Authors: Kevin Buzzard, Natasha Johnson
 import tactic
 import data.real.irrational
 
+namespace chapter02.exercise03
+
+
 def rational (x : ℝ) :=
   ∃ (a b : ℤ), x = a / b
 
@@ -42,3 +45,5 @@ lemma part_d : ∀ {a b : ℝ}, a ≠ 0 → rational a → irrational b → irra
 begin
   sorry
 end
+
+end chapter02.exercise03

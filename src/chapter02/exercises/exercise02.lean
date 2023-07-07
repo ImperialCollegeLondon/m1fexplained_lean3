@@ -1,6 +1,8 @@
 import tactic
 import data.real.irrational
 
+namespace chapter02.exercise02
+
 def rational (x : ℝ) :=
   ∃ (a b : ℤ), x = a / b
 
@@ -25,3 +27,6 @@ lemma part_e : rational (real.sqrt 2 + real.sqrt 3 - real.sqrt (5 + 2 * real.sqr
 begin
   sorry
 end
+
+end chapter02.exercise02
+

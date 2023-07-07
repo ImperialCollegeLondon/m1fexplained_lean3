@@ -6,6 +6,8 @@
 import tactic
 import data.nat.parity
 
+namespace chapter19.exercise06
+
 open function
 
 def f (n : ℕ) : ℤ := if 2 ∣ n then n / 2 else - (n+1) / 2 -- replace 37 with a surjective function
@@ -96,3 +98,5 @@ begin
     zify at hab,
     simpa [abs_of_nonpos ha, abs_of_nonpos hb] using hab, },
 end
+
+end chapter19.exercise06

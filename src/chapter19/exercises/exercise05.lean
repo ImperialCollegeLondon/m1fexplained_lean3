@@ -21,6 +21,8 @@ import data.int.succ_pred
 import data.int.parity
 import data.nat.factorization.basic
 
+namespace chapter19.exercise05
+
 open function 
 
 lemma parta (S : finset ℤ) (hS : S.card = 6) : ∃ a b ∈ S, a ≠ b ∧ (5 : ℤ) ∣ a - b :=
@@ -471,4 +473,4 @@ begin
     { rw [ha.2, hb.2], }, },
 end
 
-
+end chapter19.exercise05

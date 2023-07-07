@@ -1,6 +1,8 @@
 import set_theory.zfc.basic
 import tactic
 
+namespace chapter01.exercise01
+
 lemma Set.well_founded : ¬ ∃ α : Set, α = {α} :=
 begin
   sorry
@@ -139,3 +141,5 @@ begin
   simp at hx,
   cases hx,
 end
+
+end chapter01.exercise01

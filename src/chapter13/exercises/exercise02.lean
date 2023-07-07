@@ -1,6 +1,8 @@
 import data.int.modeq
 import data.nat.prime
 
+namespace chapter13.exercise02
+
 /-
 Let p be a prime number and k a positive integer.
 (a) Show that if x is an integer such that x^2 ≡ x mod p, then x ≡ 0 or 1 mod p.
@@ -18,3 +20,5 @@ lemma part_b (p : ℤ) (hp : prime p) (k : ℕ) (hk : k > 0) (x : ℤ) : x^2 ≡
 begin
   sorry
 end
+
+end chapter13.exercise02

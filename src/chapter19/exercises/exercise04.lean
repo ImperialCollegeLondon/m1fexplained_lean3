@@ -8,6 +8,8 @@ or a counterexample.
 -/
 import tactic
 
+namespace chapter19.exercise04
+
 open function -- so we can write `injective`/`surjective` instead of `function.injective`/`function.surjective`
 
 -- For each of the parts below, if you think it's false then stick `¬` in front of it before you start proving it.
@@ -78,3 +80,5 @@ begin
   specialize h hy,
   simpa using h,
 end
+
+end chapter19.exercise04

@@ -5,6 +5,8 @@ import data.real.irrational
 import data.nat.factorization.prime_pow
 import data.nat.prime_norm_num
 
+namespace chapter19.exercise01
+
 /-
 
 For each of the following functions `f`, say whether `f` is `1-1` and whether `f`
@@ -60,7 +62,7 @@ lemma s_def (a b : ℤ) : a ≈ b ↔ a ≡ b [ZMOD 7]:= iff.rfl
 -- and now we can use the theory of quotients. The set `S` in the question
 -- is called `quotient s` here. 
 
-def f6 (x : quotient s) : quotient s :=
+def f6 (x : quotient chapter19.exercise01.s) : quotient chapter19.exercise01.s :=
 quotient.map (λ t : ℤ, t + 1) begin
   -- Lean points out that if we don't show the below, then `f6` isn't well-defined!
   show ∀ a b : ℤ, a ≈ b → a + 1 ≈ b + 1,
@@ -302,3 +304,5 @@ begin
   unfold f6,
   simp,
 end
+
+end chapter19.exercise01

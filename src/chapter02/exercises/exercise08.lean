@@ -1,5 +1,7 @@
 import tactic
 
+namespace chapter02.exercise08
+
 inductive colour : Type
 | red : colour
 | blue : colour
@@ -56,3 +58,5 @@ begin
   simp only [mul_zero, add_zero] at t,
   norm_num at t,
 end
+
+end chapter02.exercise08

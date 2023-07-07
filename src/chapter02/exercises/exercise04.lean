@@ -1,6 +1,8 @@
 import tactic
 import data.real.irrational
 
+namespace chapter02.exercise04
+
 def rational (x : ℝ) :=
   ∃ (a b : ℤ), x = a / b
 
@@ -15,3 +17,5 @@ lemma part_b (x : ℚ) (y : ℚ) (h : rational ((x^2 + x + real.sqrt 2)/(y^2 + y
 begin
   sorry
 end
+
+end chapter02.exercise04

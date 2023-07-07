@@ -1,5 +1,7 @@
 import topology.instances.real 
 
+namespace chapter23.exercise07
+
 open filter real
 open_locale topology
 
@@ -22,3 +24,6 @@ theorem part_ii (a : ℕ → ℝ) (h1 : a 1 = 1) (h2 : ∀ n, a (n+1) = (a n ^ 2
 begin 
   sorry 
 end 
+
+end chapter23.exercise07
+

@@ -1,6 +1,9 @@
 import data.int.modeq
 import data.zmod.algebra
 import tactic
+
+namespace chapter13.exercise03
+
 /-
 For each of the following congruence equations, either find a solution x ∈ ℤ or show that no solution exists:
 (a) 99x ≡ 18 mod 30.
@@ -68,3 +71,5 @@ begin
   use 2,
   norm_num,
 end
+
+end chapter13.exercise03

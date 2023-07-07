@@ -2,6 +2,8 @@ import topology.instances.real
 import data.complex.exponential
 import data.real.irrational 
 
+namespace chapter23.exercise08
+
 open filter real
 open_locale topology
 open_locale big_operators 
@@ -33,3 +35,5 @@ theorem part_d :
 begin 
   sorry 
 end 
+
+end chapter23.exercise08

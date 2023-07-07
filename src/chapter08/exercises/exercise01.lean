@@ -1,5 +1,7 @@
 import tactic
 
+namespace chapter08.exercise01
+
 /-
 Prove by induction that it's possible to pay, without requiring
 change, any whole number of roubles greater than 7 with
@@ -44,3 +46,5 @@ begin
         rw hp,
         linarith, } } },
 end
+
+end chapter08.exercise01

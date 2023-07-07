@@ -1,6 +1,8 @@
 import tactic
 import data.real.basic -- for part d
 
+namespace chapter08.exercise05
+
 lemma part_a (n : ℕ) : (11 : ℤ) ∣ 5^(2*n) - 3^n :=
 begin
   induction n with x hx,
@@ -120,4 +122,5 @@ begin
   }
 end
 
+end chapter08.exercise05
 

@@ -1,5 +1,7 @@
 import topology.instances.real 
 
+namespace chapter23.exercise04
+
 open filter real
 open_locale topology
 
@@ -86,3 +88,5 @@ theorem part_iv_d :
 begin 
   sorry 
 end 
+
+end chapter23.exercise04

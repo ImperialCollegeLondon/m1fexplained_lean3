@@ -1,5 +1,7 @@
 import data.nat.modeq
 
+namespace chapter13.exercise01
+
 /-
 (a) Find r with 0 ≤ r ≤ 10 such that 7^137 ≡ r mod 11.
 (b) Find r with 0 ≤ r < 645 such that 2^81 ≡ r mod 645.
@@ -36,3 +38,5 @@ begin
   {norm_num, },
   {norm_num, },
 end
+
+end chapter13.exercise01

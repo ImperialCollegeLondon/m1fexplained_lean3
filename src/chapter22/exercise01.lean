@@ -7,6 +7,8 @@ import data.real.basic
 import analysis.normed.field.unit_ball
 import data.real.sqrt
 
+namespace chapter22.exercise01
+
 open_locale topology big_operators nnreal ennreal uniformity pointwise
 
 /-
@@ -480,3 +482,5 @@ lemma part_d_glb : is_glb Siv 37 :=
 begin
   sorry
 end
+
+end chapter22.exercise01
