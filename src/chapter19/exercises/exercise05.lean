@@ -117,9 +117,13 @@ begin
   rw ← finset.sum_union,
   { apply finset.sum_congr _ (λ x _, rfl),
     rw [finset.range_eq_Ico, finset.union_comm, finset.Ico_union_Ico_eq_Ico (nat.zero_le a) h], },
-  { rintros x (hx : x ∈ _ ∩ _),
-    rw [finset.mem_inter, finset.mem_Ico, finset.mem_range] at hx,
-    rcases hx with ⟨⟨h1, _⟩, h2⟩,
+  { rintros x h1 h2,
+    intros y hy,
+    specialize h1 hy,
+    specialize h2 hy,
+    rw [finset.mem_Ico] at h1,
+    rw [finset.mem_range] at h2,
+    rcases h1 with ⟨h1, _⟩,
     exact false.elim (h1.not_lt h2), },
 end
 
