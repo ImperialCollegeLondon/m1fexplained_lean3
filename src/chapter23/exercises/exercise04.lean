@@ -1,7 +1,7 @@
 import topology.instances.real 
 
 open filter real
-open_locale topological_space 
+open_locale topology
 
 theorem part_i_a :
   ∃ b : ℝ, ∀ n, abs (n^3 / (n^3 - 1) : ℝ) ≤ b :=
