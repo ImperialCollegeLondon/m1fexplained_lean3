@@ -2,12 +2,13 @@ import data.real.sqrt
 import data.complex.exponential
 
 open filter real
-open_locale topological_space 
+open_locale topology
 
 theorem part_i :
   tendsto (λ n : ℕ, n / (n + 5) : ℕ → ℝ) at_top (𝓝 1) :=
 begin 
-  sorry 
+  rw tendsto,
+  sorry,
 end 
 
 theorem part_ii :

@@ -14,7 +14,7 @@ leanproject get ImperialCollegeLondon/m1fexplained
 
 ## Contributors.
 
-Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, `chrt`.
+Kevin Buzzard, Mark Zhou, Siddharth Hariharan, Katie Watson, Douhan Wang, Zhangir Azerbayev, `chrt`, Yuchen Wang, Xialu Zheng, Natasha Johnson.
 
 ## Contributing.
 

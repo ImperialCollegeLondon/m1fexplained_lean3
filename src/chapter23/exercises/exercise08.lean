@@ -3,7 +3,7 @@ import data.complex.exponential
 import data.real.irrational 
 
 open filter real
-open_locale topological_space 
+open_locale topology
 open_locale big_operators 
 
 noncomputable def e : ℕ → ℝ := λ n, ∑ i in finset.range(n+1), 1 / (nat.factorial i)

@@ -1,7 +1,7 @@
 import topology.instances.real 
 
 open filter real
-open_locale topological_space 
+open_locale topology
 
 
 theorem part_i_a (a : ℕ → ℝ) (h1 : a 1 = 1)

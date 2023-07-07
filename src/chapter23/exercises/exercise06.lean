@@ -1,7 +1,7 @@
 import topology.instances.real 
 
 open filter real
-open_locale topological_space 
+open_locale topology
 
 theorem problem_6 (f : ℕ → ℝ) (hf : ∀ n, f (n + 1) ≤ f n)
   (hf_bdd : ∃ a, ∀ n, f n ≤ a) :
