@@ -44,8 +44,7 @@ end
 -- 7 is the least upper bound.
 lemma part_a_lub : is_lub Si 7 :=
 begin
-  rw is_lub,
-  rw is_least,
+  rw [is_lub, is_least],
   split,
   { rw upper_bounds,
     intro t,
@@ -94,8 +93,7 @@ end
 -- -2 is the greatest lower bound.
 lemma part_a_glb : is_glb Si (-2) :=
 begin
-  rw is_glb,
-  rw is_greatest,
+  rw [is_glb, is_greatest],
   split,
   { rw lower_bounds,
     intro t,
