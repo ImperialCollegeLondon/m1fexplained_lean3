@@ -19,15 +19,14 @@ begin
   suffices: 2*(real.sqrt 2) < 3, by linarith,
   suffices: (2*(real.sqrt 2))^2 < 3^2, 
   {
-    apply lt_of_pow_lt_pow 2,
+    refine lt_of_pow_lt_pow 2 _ this,
     norm_num,
-    exact this,
   },
   {
     rw [mul_pow, real.sq_sqrt],
-    norm_num,
-    rw zero_le_bit0,
-    exact zero_le_one
+    { norm_num, },
+    { rw zero_le_bit0,
+      exact zero_le_one },
   },
   norm_num,
 end
