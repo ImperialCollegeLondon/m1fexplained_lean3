@@ -64,9 +64,8 @@ lemma partc : ∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f
 begin
   intros X Y Z f g hgf a b hf,
   have hg : g (f a) = g (f b),
-  {rw hf},
-  specialize hgf hg,
-  exact hgf,
+  { rw hf },
+  exact hgf hg,
 end
 
 lemma partd : ¬ (∀ (X Y Z : Type) (f : X → Y) (g : Y → Z), injective (g ∘ f) → injective g) :=
@@ -75,7 +74,7 @@ begin
   specialize h X Y Z f g,
   specialize h gf_injective,
   have hy : g Y.b = g Y.c,
-  {unfold g},
+  { unfold g },
   specialize h hy,
   simpa using h,
 end
