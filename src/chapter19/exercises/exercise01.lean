@@ -3,6 +3,7 @@ import data.real.sqrt
 import data.int.modeq
 import data.real.irrational
 import data.nat.factorization.prime_pow
+import data.nat.prime_norm_num
 
 /-
 
@@ -149,31 +150,82 @@ end
 lemma padic_val_nat_two_aux (a b c : ℕ) : padic_val_nat 2 (2 ^ a * 3 ^ b * 5 ^ c) = a :=
 begin
   haveI : fact (nat.prime 2) := fact.mk nat.prime_two,
-  rw [padic_val_nat.mul 2 (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.prime_pow,
+  rw [padic_val_nat.mul (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.prime_pow,
     padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
   { simp },
   { intro h, 
     replace h := nat.prime.dvd_of_dvd_pow nat.prime_two h,
     norm_num at h, },
-    { intro h, 
+  { intro h, 
     replace h := nat.prime.dvd_of_dvd_pow nat.prime_two h,
     norm_num at h, },
-  all_goals {exact pow_ne_zero _ (by norm_num)},
+  all_goals {try {exact pow_ne_zero _ (by norm_num)}},
+  assumption
+end
+
+lemma padic_val_nat_three_aux (a b c : ℕ) : padic_val_nat 3 (2 ^ a * 3 ^ b * 5 ^ c) = b :=
+begin
+  haveI : fact (nat.prime 3) := fact.mk nat.prime_three,
+  rw [padic_val_nat.mul (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.prime_pow,
+    padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
+  { simp },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_three h,
+    norm_num at h, },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_three h,
+    norm_num at h, },
+  all_goals {try {exact pow_ne_zero _ (by norm_num)}},
+  assumption,
+end
+
+lemma nat.prime_five : nat.prime 5 := by norm_num
+
+lemma padic_val_nat_five_aux (a b c : ℕ) : padic_val_nat 5 (2 ^ a * 3 ^ b * 5 ^ c) = c :=
+begin
+  haveI : fact (nat.prime 5) := fact.mk nat.prime_five,
+  rw [padic_val_nat.mul (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.prime_pow,
+    padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
+  { simp },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_five h,
+    norm_num at h, },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_five h,
+    norm_num at h, },
+  all_goals {try {exact pow_ne_zero _ (by norm_num)}},
+  assumption,
 end
 
 lemma exercise04inj : injective f4 :=
 begin
   rintro ⟨a1, b1, c1⟩ ⟨a2, b2, c3⟩ h,
   unfold f4 at h,
-  simp,
+  simp only [prod.mk.inj_iff],
   refine ⟨_, _, _⟩,
   { rw [← padic_val_nat_two_aux a1 b1 c1, h, padic_val_nat_two_aux], },
-  { 
-    sorry
-  },
-  { 
-    sorry
-  },
+  { rw [← padic_val_nat_three_aux a1 b1 c1, h, padic_val_nat_three_aux], },
+  { rw [← padic_val_nat_five_aux a1 b1 c1, h, padic_val_nat_five_aux], },
+end
+
+lemma nat.prime_seven : nat.prime 7 := by norm_num
+
+lemma padic_val_nat_seven_aux (a b c : ℕ) : padic_val_nat 7 (2 ^ a * 3 ^ b * 5 ^ c) = 0 :=
+begin
+  haveI : fact (nat.prime 7) := fact.mk nat.prime_seven,
+  rw [padic_val_nat.mul (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.eq_zero_of_not_dvd,
+    padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_seven h,
+    norm_num at h, },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_seven h,
+    norm_num at h, },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_seven h,
+    norm_num at h, },
+  all_goals {try {exact pow_ne_zero _ (by norm_num)}},
+  assumption,
 end
 
 lemma exercise04surj : ¬ (surjective f4) :=
@@ -183,8 +235,9 @@ begin
   cases h with x h,
   rcases x with ⟨a, b, c⟩,
   unfold f4 at h,
-  -- should be solved by considering prime factorisation 
-  sorry,
+  have := padic_val_nat_seven_aux a b c,
+  rw h at this,
+  simpa using this,
 end
 
 lemma exercise05inj : ¬ (injective f5) :=
@@ -197,6 +250,24 @@ begin
   simpa using h,
 end
 
+lemma padic_val_nat_five_aux_ (a b c : ℕ) : padic_val_nat 5 (2 ^ a * 3 ^ b * 6 ^ c) = 0 :=
+begin
+  haveI : fact (nat.prime 5) := fact.mk nat.prime_five,
+  rw [padic_val_nat.mul (mul_ne_zero _ _), padic_val_nat.mul, padic_val_nat.eq_zero_of_not_dvd,
+    padic_val_nat.eq_zero_of_not_dvd, padic_val_nat.eq_zero_of_not_dvd],
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_five h,
+    norm_num at h, },
+  { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_five h,
+    norm_num at h, },
+    { intro h, 
+    replace h := nat.prime.dvd_of_dvd_pow nat.prime_five h,
+    norm_num at h, },
+  all_goals {try {exact pow_ne_zero _ (by norm_num)}},
+  assumption,
+end
+
 lemma exercise05surj : ¬ (surjective f5) :=
 begin
   intro h,
@@ -204,10 +275,9 @@ begin
   cases h with x h,
   rcases x with ⟨a, b, c⟩,
   unfold f5 at h,
-  have hp : 2 ^ (a + c) * 3 ^ (b + c) = 5,
-  -- should be solved by considering prime factorsation
-  {sorry},
-  sorry,
+  have := padic_val_nat_five_aux_ a b c,
+  rw h at this,
+  simpa using this,
 end
 
 lemma exercise06inj : injective f6 :=
