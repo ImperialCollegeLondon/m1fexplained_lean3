@@ -1,7 +1,7 @@
 import data.real.basic
 import analysis.normed.field.unit_ball
 
-open_locale topological_space big_operators nnreal ennreal uniformity pointwise
+open_locale topology big_operators nnreal ennreal uniformity pointwise
 
 /-
 Which of the following sets S have an upper bound and which have a
@@ -58,7 +58,7 @@ begin
   sorry
 end
 
-def Sii : set ℝ := {x | ∥x - 3∥ < ∥x + 7∥}.
+def Sii : set ℝ := {x | ‖x - 3‖ < ‖x + 7‖}.
 
 -- If you think Sii is bounded above, prove this. If you
 -- think it's not, then *disprove* it by putting `¬` in front of it.
