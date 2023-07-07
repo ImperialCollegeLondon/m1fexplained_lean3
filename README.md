@@ -1,3 +1,7 @@
+# IMPORTANT: This repo is now deprecated
+
+The work in this repo has been ported to Lean 4 and is now ongoing at [this Lean 4 repo](https://github.com/ImperialCollegeLondon/M1F-explained).
+
 # M1F, explained
 
 A Lean formalisation of parts of Martin Liebeck's "A concise introduction to pure mathematics".
