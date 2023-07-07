@@ -4,6 +4,7 @@
 -/
 
 import tactic
+import data.nat.parity
 
 open function
 
@@ -30,7 +31,7 @@ begin
   { use 0,
     unfold f,
     split_ifs,
-    simp only [nat.cast_zero, euclidean_domain.zero_div],
+    simp [int.zero_div],
     exfalso,
     norm_num at h, },
   { use (2 * z).nat_abs,
@@ -71,7 +72,7 @@ begin
     unfold g at hab,
     simp only [if_pos ha, if_pos hb, mul_eq_mul_left_iff, bit0_eq_zero, nat.one_ne_zero, or_false] at hab,
     zify at hab,
-    rwa [int.nat_abs_of_nonneg ha.le, int.nat_abs_of_nonneg hb.le] at hab, },
+    rwa [abs_of_nonneg ha.le, abs_of_nonneg hb.le] at hab, },
   { have ha : a ≤ 0,
     { by_contra,
       push_neg at h,
@@ -93,5 +94,5 @@ begin
     unfold g at hab,
     simp only [if_neg ha.not_lt, if_neg hb.not_lt, add_left_inj, mul_eq_mul_left_iff, bit0_eq_zero, nat.one_ne_zero, or_false] at hab,
     zify at hab,
-    simpa [int.of_nat_nat_abs_of_nonpos ha, int.of_nat_nat_abs_of_nonpos hb] using hab, },
+    simpa [abs_of_nonpos ha, abs_of_nonpos hb] using hab, },
 end
