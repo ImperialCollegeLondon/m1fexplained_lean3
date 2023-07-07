@@ -15,25 +15,11 @@ begin
   simp [function.funext_iff, g],
   apply forall_congr,
   intro x,
-  split,
-  {
-    intro h,
-    let y := f x,
-    have : y^2 + y + 3 = x^2 - 3 * x + 5 → y = x - 2 ∨ y = -x + 1,
-    {
-      intro h,
-      have h' : y^2 + y + 3 = x^2 - 3 * x + 5 ↔ (y - (x - 2)) * (y - (-x + 1)) = 0,
-      {split; intro h; nlinarith},
-      simpa [h', zero_eq_mul, sub_eq_zero] using h,
-    },
-    specialize this h,
-    exact this,
-  },
-  {
-    rintro (h | h);
-    simp [h] at *;
-    ring,
-  },
+  have h' : (f x)^2 + (f x) + 3 = x^2 - 3 * x + 5 ↔ (f x - (x - 2)) * (f x - (-x + 1)) = 0,
+  { split; intro h; nlinarith },
+  rw [h', mul_eq_zero],
+  congr' 2;
+  simp [sub_eq_zero],
 end
 
 

@@ -197,7 +197,7 @@ lemma exercise04inj : injective f4 :=
 begin
   rintro ⟨a1, b1, c1⟩ ⟨a2, b2, c3⟩ h,
   unfold f4 at h,
-  simp,
+  simp only [prod.mk.inj_iff],
   refine ⟨_, _, _⟩,
   { rw [← padic_val_nat_two_aux a1 b1 c1, h, padic_val_nat_two_aux], },
   { rw [← padic_val_nat_three_aux a1 b1 c1, h, padic_val_nat_three_aux], },

@@ -3,8 +3,12 @@ import combinatorics.pigeonhole
 import data.int.parity
 import data.nat.factorization.basic
 
+/-
+In any set of 101 integers chosen from the set {1, 2, . . . , 200}, there
+must be two integers such that one divides the other.
+-/
 
-lemma nat.ord_compl_eq_dvd (a b : ℕ) (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a) (hab : a < b) :
+lemma nat.ord_compl_eq_dvd {a b : ℕ} (h : ord_compl[2] a = ord_compl[2] b) (ha : 0 < a) (hab : a < b) :
   a ∣ b :=
 begin
   -- if a = 2^k1 * p, b = 2^k2 * p
@@ -23,37 +27,22 @@ begin
   { by_contra hc,
     push_neg at hc,
     have hc' : 2 ^ k2 < 2 ^ k1,
-    { rw pow_lt_pow_iff,
-      exact hc,
+    { rwa pow_lt_pow_iff,
       norm_num, },
-    have hak : 0 < a / 2 ^ k1,
-    { apply nat.div_pos,
-      apply nat.ord_proj_le,
-      exact ne_of_gt ha,
-      exact haf, },
+    have hak : 0 < a / 2 ^ k1 := nat.div_pos (nat.ord_proj_le _ ha.ne') haf,
     suffices : b < a,
     { linarith, },
-    { have hc'' :  2 ^ k2 * (b / 2 ^ k2) < 2 ^ k1 * (a / 2 ^ k1),
-      { rw ← h, apply mul_lt_mul_of_pos_right hc' hak, },
+    have hc'' :  2 ^ k2 * (b / 2 ^ k2) < 2 ^ k1 * (a / 2 ^ k1),
+    { rw ← h, apply mul_lt_mul_of_pos_right hc' hak, },
     rw mul_comm (2 ^ k2) (b / 2 ^ k2) at hc'',
-    rw nat.div_mul_cancel at hc'',
-    swap, exact hbd,
+    rw nat.div_mul_cancel hbd at hc'',
     rw mul_comm (2 ^ k1) (a / 2 ^ k1) at hc'',
-    rw nat.div_mul_cancel at hc'',
-    swap, exact had,
-    exact hc'', }, },
-  have := nat.pow_div hab h02,
-  rw ← this,
+    rwa nat.div_mul_cancel had at hc'', },
+  rw ← nat.pow_div hab h02,
   -- again we need divisibility to proceed
   have hkd := pow_dvd_pow 2 hab,
-  rw mul_comm,
-  rw ← nat.mul_div_assoc _ hkd,
-  rw mul_comm a (2^k2),
-  rw nat.mul_div_assoc,
-  swap, exact had,
-  rw h,
-  rw mul_comm,
-  rw nat.div_mul_cancel hbd,
+  rw [mul_comm, ← nat.mul_div_assoc _ hkd, mul_comm a (2^k2), nat.mul_div_assoc _ had,
+    h, mul_comm, nat.div_mul_cancel hbd],
 end
 
 lemma partf (T : finset ℕ) (hT : ∀ t ∈ T, (1 : ℤ) ≤ t ∧ t ≤ 200) (hTcard : T.card = 101) : ∃ a b : ℕ,
@@ -81,7 +70,7 @@ begin
           norm_num, },
         { rcases hx with ⟨⟨h1, h2⟩, h3⟩,
           rw ← nat.odd_iff_not_even at h3,
-          unfold odd at h3,
+--          unfold odd at h3,
           cases h3 with k h3,
           rw h3,
           simp only [nat.add_succ_sub_one, add_zero, nat.mul_div_right, nat.succ_pos'], },
@@ -120,8 +109,8 @@ begin
     linarith, }, 
     refine ⟨⟨_,_⟩,_⟩,
     { rw nat.one_le_div_iff,
-      {apply nat.ord_proj_le 2 ht0, },
-      {exact nat.ord_proj_pos t 2, }, },
+      { apply nat.ord_proj_le 2 ht0, },
+      { exact nat.ord_proj_pos t 2, }, },
     { apply nat.div_le_of_le_mul,
       have h1 := nat.ord_proj_pos t 2,
       rw ← nat.succ_le_iff at h1,
@@ -143,7 +132,7 @@ begin
       cases hT with h1 h2,
       linarith, },
     suffices : f a = f b,
-    { apply nat.ord_compl_eq_dvd, 
+    { refine nat.ord_compl_eq_dvd _ _ _, 
       exact this,
       exact ha0,
       exact h, },
