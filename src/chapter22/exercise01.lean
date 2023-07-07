@@ -93,8 +93,7 @@ end
 -- -2 is the greatest lower bound.
 lemma part_a_glb : is_glb Si (-2) :=
 begin
-  rw is_glb,
-  rw is_greatest,
+  rw [is_glb, is_greatest],
   split,
   rw lower_bounds,
   intro t,
